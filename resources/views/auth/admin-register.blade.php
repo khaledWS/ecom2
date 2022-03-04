@@ -21,6 +21,11 @@
                     required />
             </div>
 
+            <div class="mt-4 hidden">
+                <x-jet-label for="role_id" value="{{ __('role') }}" />
+                <x-jet-input id="role_id" class="block mt-1 w-full" type="text" name="role_id" :value="1" required />
+            </div>
+
 
             <div class="mt-4">
                 <x-jet-label for="password" value="{{ __('Password') }}" />

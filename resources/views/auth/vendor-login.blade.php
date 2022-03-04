@@ -11,7 +11,7 @@
                 {{ session('status') }}
             </div>
         @endif
-
+        <h1>VENDOR</h1>
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
@@ -19,13 +19,6 @@
                 <x-jet-label for="email" value="{{ __('Email') }}" />
                 <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
             </div>
-
-
-            <div class="mt-4 hidden">
-                <x-jet-label for="role_id" value="{{ __('role') }}" />
-                <x-jet-input id="role_id" class="block mt-1 w-full" type="text" name="role_id" :value="3" required />
-            </div>
-
 
             <div class="mt-4">
                 <x-jet-label for="password" value="{{ __('Password') }}" />

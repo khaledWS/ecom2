@@ -21,6 +21,28 @@
                     required />
             </div>
 
+            <div class="mt-4">
+                <x-jet-label for="Address" value="{{ __('Address') }}" />
+                <x-jet-input id="Address" class="block mt-1 w-full" type="text" name="Address" :value="old('Address')"
+                    required />
+            </div>
+
+
+            <div class="mt-4">
+                <x-jet-label for="mobile" value="{{ __('Mobile') }}" />
+                <x-jet-input id="mobile" class="block mt-1 w-full" type="text" name="mobile" :value="old('mobile')"
+                    required />
+            </div>
+            {{-- <div class="mt-4">
+                <x-jet-label for="email" value="{{ __('license') }}" />
+                <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"
+                    required />
+            </div> --}}
+
+            <div class="mt-4 hidden">
+                <x-jet-label for="role_id" value="{{ __('role') }}" />
+                <x-jet-input id="role_id" class="block mt-1 w-full" type="text" name="role_id" :value="2" required />
+            </div>
 
             <div class="mt-4">
                 <x-jet-label for="password" value="{{ __('Password') }}" />
