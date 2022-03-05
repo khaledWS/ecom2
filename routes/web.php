@@ -15,11 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('app.back.dashboard');
-// });
+Route::get('/', function () {
+    return view('dashboard');
+});
 
-Route::get('/', App\http\Livewire\Back\DashboardComponent::class);
+
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

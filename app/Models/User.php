@@ -30,6 +30,8 @@ class User extends Authenticatable
         'role_id',
         'mobile',
         'address',
+        'notes',
+        'wishlist'
     ];
 
     /**
