@@ -3,6 +3,7 @@
 /public/storage
 /public/assets
 /public/app-assets
+/public/store/*
 /storage/*.key
 /vendor
 .env

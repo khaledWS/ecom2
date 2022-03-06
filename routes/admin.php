@@ -36,13 +36,13 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
  Route::prefix('category')->group(function () {
     Route::get('/', [CategoryController::class, 'index'])->name('admin.categories');
     //Create new
-    Route::get('/create', [CategoryController::class, 'createCategory'])->name('admin.categories.create');
-    Route::post('/store', [CategoryController::class, 'storeCategory'])->name('admin.categories.store');
+    Route::get('/create', [CategoryController::class, 'create'])->name('admin.categories.create');
+    Route::post('/store', [CategoryController::class, 'store'])->name('admin.categories.store');
     //Edit
-    Route::get('/edit/{id}', [CategoryController::class, 'editCategory'])->name('admin.categories.edit');
-    Route::post('/update/{id}', [CategoryController::class, 'updateCategory'])->name('admin.categories.update');
+    Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('admin.categories.edit');
+    Route::post('/update/{id}', [CategoryController::class, 'update'])->name('admin.categories.update');
     //Delete
-    Route::get('/delete/{id}', [CategoryController::class, 'deleteCategory'])->name('admin.categories.delete');
+    Route::get('/delete/{id}', [CategoryController::class, 'delete'])->name('admin.categories.delete');
 
      });    //redirects
 });

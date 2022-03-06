@@ -19,10 +19,18 @@ class Category extends Model
         'slug',
         'description',
         'image',
+        'banner',
         'active',
         'info',
         'is_main',
         'parent_category_id',
 
     ];
+
+
+
+    public function getImage()
+    {
+        return getPhotoPath($this->image, 'categories');
+    }
 }

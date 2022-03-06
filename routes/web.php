@@ -26,3 +26,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 
+Route::get('admin/category/create',function(){
+    throw new Exception();
+})->name('admin.categories.create');

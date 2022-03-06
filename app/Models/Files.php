@@ -17,8 +17,10 @@ class Files extends Model
      */
     protected $fillable = [
         'name',
+        'original_name',
         'type',
-        'path',
+        'file_name',
         'usage',
+        'disk',
     ];
 }
