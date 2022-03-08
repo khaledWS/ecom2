@@ -29,7 +29,7 @@
                             <!-------------------- Card Content -------------------->
                             @include('app.admin.vendors.components.card-content',[
                             'formPostRouteName' => 'admin.categories.update',
-                            'formPostRoutePara' => {$category->id},
+                            'formPostRoutePara' => $category->id,
                             'mainCategories' => [],
                             'job' => 'edit',
                             ])

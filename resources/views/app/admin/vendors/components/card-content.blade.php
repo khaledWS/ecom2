@@ -34,18 +34,31 @@
                         <div class="form-group">
                             <label for="slug"> slug</label>
                             <div class="input-group">
-                                <div onclick='takeCharge()' class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1">@</span>
+                                <div id="for-test" onclick='myTest()' class="input-group-prepend">
+                                    {{-- <span class="input-group-text" id="basic-addon1">@</span> --}}
+                                    <button  type="button" class="btn btn-info">
+                                        <i  class="la la-paper-plane"></i>
+                                      </button>
                                 </div>
-                                <input type="text" id="slug" class="form-control w-full" placeholder="slug"
-                                    name="slug" aria-describedby="basic-addon1"
-                                    @if ($job == 'edit') value = "{{ $category->slug }}" @else value = "{{ old('slug') }}" @endif readonly>
+                                {{-- <input hidden type="text" id="slug" class="form-control w-full" placeholder="slug" name="slug"
+                                    aria-describedby="basic-addon1"
+                                    @if ($job == 'edit') value = "{{ $category->slug }}" @else value = "{{ old('slug') }}" @endif
+                                    readonly> --}}
+                                    {{-- <button type="button" class="btn btn-primary">
+                                        <i class="la la-paper-plane"></i>
+                                      </button> --}}
+                                <p class='form-control alert-blue-grey' id='slug'>
+                                    @if ($job == 'edit')
+                                        {{ $category->slug }}
+                                    @else
+                                        {{ old('slug') }} @endif
+                                </p>
 
                             </div>
                             @error('slug')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
-                            <div class="font-small-1">the Slug will be generated from the name</div>
+                            <div  id="slug-info"class="font-small-1">the Slug will be generated from the name</div>
                         </div>
 
                     </div>
@@ -66,7 +79,7 @@
                                     <span class="input-group-text">
                                         <div id="test" class="skin skin-flat">
                                             <input type="checkbox" id="is_main" class="form-control"
-                                                @if ($job == 'edit') value = "{{ $category->is_main }}" @else value = "{{ old('is_main') }}" @endif
+                                                @if ($job == 'edit') @if($category->is_main) checked value = "{{ $category->is_main }}" @endif @else value = "{{ old('is_main') }}" @endif
                                                 placeholder="" name="is_main">
                                             <div onclick="isChecked()" class="hidden"></div>
                                         </div>
@@ -145,7 +158,7 @@
                             @enderror
                         </div>
                         @if ($job == 'edit')
-                            <img src="{{ $category->getPhoto() }}" alt="{{ $category->name }}-photo"
+                            <img src="{{ $category->getImage() }}" alt="{{ $category->name }}-photo"
                                 class="img-fluid rounded-circle width-150 height-150">
                         @endif
                     </div>
@@ -204,6 +217,9 @@
 
 @section('script')
     <script>
+        var slugOn = 0;
+        $('.icheckbox_flat-green').addClass('icheckbox_flat');
+        $('.icheckbox_flat-green').removeClass('icheckbox_flat-green');
         setAtt();
 
         function setAtt() {
@@ -211,10 +227,15 @@
             divvy.setAttribute('onclick', 'isChecked()');
         }
 
-
         function getSlug() {
-            textBox1Val = document.getElementById("name").value;
-            document.getElementById("slug").setAttribute('value', string_to_slug(textBox1Val));
+
+            textBox1Val = $('#name').val();
+
+            if ($('#slug').prop('nodeName') == "INPUT") {
+                $('#slug').attr('value', string_to_slug(textBox1Val));
+            } else(
+                $('#slug').html(string_to_slug(textBox1Val))
+            )
             return textBox1Val;
         }
 
@@ -255,6 +276,8 @@
             if (document.getElementById("slug").hasAttribute('readonly')) {
                 document.getElementById("slug").removeAttribute('readonly');
                 document.getElementById("name").removeAttribute('oninput');
+                $('#basic-addon1').addClass('border-3');
+                // document.getElementsByClassName('input-group-prepend').addClass('w-full');
             } else {
                 slug = document.getElementById("slug");
                 slug.value = "";
@@ -262,8 +285,30 @@
                 document.getElementById("name").setAttribute('oninput', 'getSlug()');
                 textBox1Val = document.getElementById("name").value;
                 document.getElementById("slug").setAttribute('value', string_to_slug(textBox1Val));
+                $('#basic-addon1').removeClass('border-3');
             }
+        }
 
+        function myTest() {
+            inputElem =
+                "<input type='text' id='slug' class='form-control w-full' placeholder= slug' name='slug' aria-describedby='basic-addon1' @if ($job == 'edit') value = '{{ $category->slug }}' @else value = '{{ old('slug') }}' @endif>"
+            // slugText = "<p class='form-control' id ='slug'></p>";
+            slugText =  "<p class='form-control alert-blue-grey' id='slug'> @if ($job == 'edit'){{ $category->slug }}@else{{ old('slug') }}@endif</p>";
+            if (slugOn == 0) {
+                $('#slug').replaceWith(inputElem);
+                $('#slug').val("");
+                document.getElementById("name").removeAttribute('oninput');
+                document.getElementById('slug-info').setAttribute('hidden', '');
+                // $('#slug-info').setAtt();
+                slugOn = 1;
+            } else {
+                document.getElementById('slug-info').removeAttribute('hidden');
+                textBox1Val = document.getElementById("name").value;
+                $('#slug').replaceWith(slugText);
+                document.getElementById("name").setAttribute('oninput', 'getSlug()');
+                $('#slug').html(string_to_slug(textBox1Val));
+                slugOn = 0;
+            }
         }
     </script>
 @endsection

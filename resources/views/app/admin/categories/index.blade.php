@@ -2,59 +2,47 @@
 
 @section('content')
     <div class="content-wrapper">
-        <div class="content-header row">
-            <div class="content-header-left col-md-6 col-12 mb-2">
-                <h3 class="content-header-title"> main categories </h3>
-                <div class="row breadcrumbs-top">
-                    <div class="breadcrumb-wrapper col-12">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a class="text-underline-hover"
-                                    href="{{ route('admin.dashboard') }}">Main page</a>
-                            </li>
-                            <li class="breadcrumb-item active"> Main Categories
-                            </li>
-                            <li class="breadcrumb-item active"><a class="text-underline-hover"
-                                    href="{{ route('admin.categories.create') }}"> add new</a>
-                            </li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!--------------------------- Navigagion breadcrumps header -------------------------->
+        @include('app.admin.components.breadcrumps-header', [
+            'section' => 'vendors',
+            'current' => '',
+            'sectionRoute' => 'admin.categories',
+        ])
+        <!--------------------------- END Navigagion breadcrumps header -------------------------->
+
+
         <div class="content-body">
             <!-- DOM - jQuery events table -->
             <section id="dom">
                 <div class="row">
                     <div class="col-12">
+                        <!--------------------------- Card -------------------------->
                         <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Categories</h4>
-                                <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                                <div class="heading-elements">
-                                    <ul class="list-inline mb-0">
-                                        <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                        {{-- <li><a data-action="reload" wire:click="$refresh" ><i class="ft-rotate-cw"></i></a></li> --}}
-                                        <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                        {{-- <li><a data-action="close"><i class="ft-x"></i></a></li> --}}
-                                    </ul>
-                                </div>
-                            </div>
+                            <!--------------------------- Card Header -------------------------->
+                            @include('app.admin.components.card-header', [
+                                'cardHeader' => 'Add a new Category',
+                            ])
+                            <!--------------------------- END Card Header -------------------------->
 
-                                @include('layouts.includes.alerts.success')
-                                @include('.layouts.includes.alerts.errors')
+                            <!-------------------- Alerts -------------------->
+                            @include('layouts.includes.alerts.success')
+                            @include('layouts.includes.alerts.errors')
+                            <!-------------------- END Alerts -------------------->
 
+                            <!-------------------- Card Content -------------------->
                             <div class="card-content collapse show overflow-auto">
                                 <div class="card-body card-dashboard ">
                                     <table class="table display nowrap table-striped table-bordered ">
                                         <thead>
                                             <tr>
                                                 <th>name</th>
-                                                <th>slug</th>
+                                                {{-- <th>slug</th> --}}
                                                 <th>description</th>
-                                                <th>info</th>
-                                                <th>is_main</th>
-                                                <th>parent_category_id</th>
-                                                <th>image</th>
+                                                {{-- <th>info</th> --}}
+                                                {{-- TODO: IF MAIN HIGHLIGHT WITH DIFFERENT COLOR --}}
+                                                {{-- <th>is_main</th> --}}
+                                                {{-- <th>parent_category_id</th> --}}
+                                                {{-- <th>image</th> --}}
                                                 <th>actions</th>
                                             </tr>
                                         </thead>
@@ -62,17 +50,17 @@
                                             @isset($categories)
                                                 @foreach ($categories as $category)
                                                     <tr @if (!$category->Active) class="bg-red-300" @endif>
-                                                        <td>{{ $category->name }}</td>
-                                                        <td><a href="#">{{ $category->slug }}</a></td>
+                                                        <td><a href="{{route('admin.categories.show', $category->id)}}"> {{ $category->name }}</a></td>
+                                                        {{-- <td><a href="#">{{ $category->slug }}</a></td> --}}
                                                         <td>{{ $category->description }}</td>
-                                                        <td>{{ $category->info }}</td>
-                                                        <td>{{ $category->is_main }}</td>
-                                                        <td>{{ $category->parent_category_id }}</td>
-                                                        <td>
-                                                            <img class="img-thumbnai img-fluid rounded-circle width-150 height-150"
+                                                        {{-- <td>{{ $category->info }}</td> --}}
+                                                        {{-- <td>{{ $category->is_main }}</td> --}}
+                                                        {{-- <td>{{ $category->parent_category_id }}</td> --}}
+                                                        {{-- <td>
+                                                            <img class="rounded-circle img-border height-100"
                                                                 src="{{ $category->getImage() }}"
                                                                 alt="{{ $category->name }} image">
-                                                        </td>
+                                                        </td> --}}
                                                         <td>
                                                             <div class="btn-group" role="group" aria-label="Basic example">
                                                                 <a href="{{ route('admin.categories.edit', $category->id) }}"
@@ -89,13 +77,15 @@
                                             @endisset
                                         </tbody>
                                     </table>
-                                    {{-- <div class="justify-content-center d-flex mt-5">
-                                        {{ $mainCategories->links() }}
-                                    </div> --}}
+                                    <div class="justify-content-center d-flex mt-5">
+                                        {{ $categories->links() }}
+                                    </div>
 
                                 </div>
                             </div>
+                            <!-------------------- END Card Content -------------------->
                         </div>
+                        <!--------------------------- END Card -------------------------->
                     </div>
                 </div>
             </section>

@@ -26,7 +26,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3|max:200',
-            'slug' => 'required|string|min:3|max:300',
+            'slug' => 'string|min:3|max:300',
             'is_main' => 'in:0,1|nullable',
             'active' => 'in:0,1|nullable',
             'parent_category_id' => 'exists:categories,id',
