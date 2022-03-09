@@ -36,15 +36,15 @@
                             <div class="input-group">
                                 <div id="for-test" onclick='myTest()' class="input-group-prepend">
                                     {{-- <span class="input-group-text" id="basic-addon1">@</span> --}}
-                                    <button  type="button" class="btn btn-info">
-                                        <i  class="la la-paper-plane"></i>
-                                      </button>
+                                    <button type="button" class="btn btn-info">
+                                        <i class="la la-paper-plane"></i>
+                                    </button>
                                 </div>
                                 {{-- <input hidden type="text" id="slug" class="form-control w-full" placeholder="slug" name="slug"
                                     aria-describedby="basic-addon1"
                                     @if ($job == 'edit') value = "{{ $category->slug }}" @else value = "{{ old('slug') }}" @endif
                                     readonly> --}}
-                                    {{-- <button type="button" class="btn btn-primary">
+                                {{-- <button type="button" class="btn btn-primary">
                                         <i class="la la-paper-plane"></i>
                                       </button> --}}
                                 <p class='form-control alert-blue-grey' id='slug'>
@@ -58,7 +58,7 @@
                             @error('slug')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
-                            <div  id="slug-info"class="font-small-1">the Slug will be generated from the name</div>
+                            <div id="slug-info" class="font-small-1">the Slug will be generated from the name</div>
                         </div>
 
                     </div>
@@ -79,8 +79,9 @@
                                     <span class="input-group-text">
                                         <div id="test" class="skin skin-flat">
                                             <input type="checkbox" id="is_main" class="form-control"
-                                                @if ($job == 'edit') @if($category->is_main) checked value = "{{ $category->is_main }}" @endif @else value = "{{ old('is_main') }}" @endif
-                                                placeholder="" name="is_main">
+                                                @if ($job == 'edit') @if ($category->is_main) checked value = "{{ $category->is_main }}" @endif
+                                            @else value="{{ old('is_main') }}" @endif
+                                            placeholder="" name="is_main">
                                             <div onclick="isChecked()" class="hidden"></div>
                                         </div>
                                     </span>
@@ -92,9 +93,9 @@
                                     <option value="" disabled selected>Select the Parent</option>
                                     <optgroup label="Category Name">
                                         @isset($mainCategories)
-                                            @foreach ($mainCategories as $category)
-                                                <option @if ($job == 'edit' and $vendor->main_category_id == $category->id) selected @endif
-                                                    value="{{ $category->id }}">{{ $category->name }}</option>
+                                            @foreach ($mainCategories as $mainCategory)
+                                                <option @if ($job == 'edit' && $category->parent_category_id == $mainCategory->id) selected @endif
+                                                    value="{{ $mainCategory->id }}">{{ $mainCategory->name }}</option>
                                             @endforeach
                                         @endisset
                                     </optgroup>
@@ -177,6 +178,7 @@
                         <i class="la la-check-square-o"></i> Submit
                     </button>
                 </div>
+                <!--------------------------- END Actions -------------------------->
 
         </form>
         <!--------------------------- END Form -------------------------->
@@ -290,10 +292,13 @@
         }
 
         function myTest() {
-            inputElem =
-                "<input type='text' id='slug' class='form-control w-full' placeholder= slug' name='slug' aria-describedby='basic-addon1' @if ($job == 'edit') value = '{{ $category->slug }}' @else value = '{{ old('slug') }}' @endif>"
+            inputElem = "<input type='text' id='slug' class='form-control w-full' placeholder= 'slug' name='slug' aria-describedby='basic-addon1' @if ($job == 'edit') value = '{{ $category->slug }}' @else value = '{{ old('slug') }}' @endif>"
             // slugText = "<p class='form-control' id ='slug'></p>";
             slugText =  "<p class='form-control alert-blue-grey' id='slug'> @if ($job == 'edit'){{ $category->slug }}@else{{ old('slug') }}@endif</p>";
+            // @if ($job == 'edit')
+            //     {{ $category->slug }}@else{{ old('slug') }}
+            // @endif <
+            //     /p>";
             if (slugOn == 0) {
                 $('#slug').replaceWith(inputElem);
                 $('#slug').val("");

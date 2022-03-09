@@ -4,7 +4,7 @@
     <div class="content-wrapper">
         <!--------------------------- Navigagion breadcrumps header -------------------------->
         @include('app.admin.components.breadcrumps-header',[
-        'section' => "vendors",
+        'section' => "Categories",
         'current' =>"create",
         'sectionRoute' => "admin.categories"
         ])
@@ -30,7 +30,7 @@
                             @include('app.admin.vendors.components.card-content',[
                             'formPostRouteName' => 'admin.categories.store',
                             'formPostRoutePara' => '',
-                            'mainCategories' => [],
+                            'mainCategories' => $mainCategories,
                             'job' => 'create',
                             ])
                             <!-------------------- END Card Content -------------------->

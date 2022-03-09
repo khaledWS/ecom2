@@ -24,7 +24,22 @@ class UpdateCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'string|min:3|max:200',
+            'slug' => 'string|min:3|max:300',
+            'is_main' => 'in:0,1|nullable',
+            'active' => 'in:0,1|nullable',
+            'parent_category_id' => 'exists:categories,id',
+            'image' => 'image|mimes:png,jpg,jpeg',
+            'banner' => 'image|mimes:png,jpg,jpeg',
+            'info' =>'string|max:300',
+            'description' =>'string',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'mimes:png,jpg,jpeg' => 'Invalid Input',
         ];
     }
 }

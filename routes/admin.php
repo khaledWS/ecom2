@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,32 +20,65 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('register', [Laravel\Fortify\Http\Controllers\RegisteredUserController::class,'create']);
-Route::get('login', [Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::class,'create']);
+Route::get('register', [Laravel\Fortify\Http\Controllers\RegisteredUserController::class, 'create']);
+Route::get('login', [Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::class, 'create']);
 
 Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function () {
-    Route::get('/dashboard',function(){
+    Route::get('/dashboard', function () {
         return "dashboard";
     })->name('admin.dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('admin.dashboard');
+    Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+        return view('dashboard');
+    })->name('admin.dashboard');
 
 
- //main_Categories Routes
- Route::prefix('category')->group(function () {
-    Route::get('/', [CategoryController::class, 'index'])->name('admin.categories');
-    Route::get('/{id}', [CategoryController::class, 'show'])->name('admin.categories.show');
-    //Create new
-    Route::get('/create', [CategoryController::class, 'create'])->name('admin.categories.create');
-    Route::post('/store', [CategoryController::class, 'store'])->name('admin.categories.store');
-    //Edit
-    Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('admin.categories.edit');
-    Route::post('/update/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
-    //Delete
-    Route::get('/delete/{id}', [CategoryController::class, 'delete'])->name('admin.categories.delete');
+    //Categories Routes
+    Route::prefix('category')->group(function () {
+        //index
+        Route::get('/', [CategoryController::class, 'index'])->name('admin.categories');
+        //Show
+        Route::get('/{category}', [CategoryController::class, 'show'])->name('admin.categories.show');
+        //new
+        Route::get('/create', [CategoryController::class, 'create'])->name('admin.categories.create');
+        Route::post('/store', [CategoryController::class, 'store'])->name('admin.categories.store');
+        //Edit
+        Route::get('/edit/{category}', [CategoryController::class, 'edit'])->name('admin.categories.edit');
+        Route::post('/update/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
+        //Delete
+        Route::get('/delete/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
+    });
 
-     });    //redirects
+    //    //Product routes
+    //    Route::prefix('product')->group(function () {
+    //     //index
+    //     Route::get('/', [ProductController::class, 'index'])->name('admin.products');
+    //     //Show
+    //     Route::get('/{product}', [ProductController::class, 'show'])->name('admin.products.show');
+    //     //new
+    //     Route::get('/create', [ProductController::class, 'create'])->name('admin.products.create');
+    //     Route::post('/store', [ProductController::class, 'store'])->name('admin.products.store');
+    //     //Edit
+    //     Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('admin.products.edit');
+    //     Route::post('/update/{product}', [ProductController::class, 'update'])->name('admin.products.update');
+    //     //Delete
+    //     Route::get('/delete/{product}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
+    // });
+
+
+       //Product routes
+       Route::prefix('vendor')->group(function () {
+        //index
+        Route::get('/', [ProductController::class, 'index'])->name('admin.vendors');
+        //Show
+        Route::get('/{vendor}', [ProductController::class, 'show'])->name('admin.vendors.show');
+        //new
+        Route::get('/create', [ProductController::class, 'create'])->name('admin.vendors.create');
+        Route::post('/store', [ProductController::class, 'store'])->name('admin.vendors.store');
+        //Edit
+        Route::get('/edit/{vendor}', [ProductController::class, 'edit'])->name('admin.vendors.edit');
+        Route::post('/update/{vendor}', [ProductController::class, 'update'])->name('admin.vendors.update');
+        //Delete
+        Route::get('/delete/{vendor}', [ProductController::class, 'destroy'])->name('admin.vendors.destroy');
+    });
 });
-

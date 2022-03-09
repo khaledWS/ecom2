@@ -15,9 +15,13 @@ use Livewire\WithPagination;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        //VALIDATE AUTHORIZATION
+    }
     use WithPagination;
     /**
-     * Display a listing of the resource.
+     * Display a listing of the Categories.
      *
      * @return \Illuminate\Http\Response
      */
@@ -25,18 +29,17 @@ class CategoryController extends Controller
     {
         $categories = Category::paginate(10);
         return view('app.admin.categories.index', compact('categories'));
-        // return view('layouts.admin');
-
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new Category.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        return view('app.admin.categories.create');
+        $mainCategories = Category::Main()->get();
+        return view('app.admin.categories.create', compact('mainCategories'));
     }
 
     /**
@@ -51,7 +54,6 @@ class CategoryController extends Controller
         //Validation of the form is Done Through the MainCategoryRequest Class Container sends it validates the input then returns here
         try {
             $newCategory = collect($request);
-
             if ($newCategory->has('parent_category_id') && $newCategory->has('parent_category_id')) {
                 $newCategory->forget('is_main');
             }
@@ -68,10 +70,10 @@ class CategoryController extends Controller
                 'description' => $newCategory['description'],
                 'parent_category_id	' =>  $newCategory->has('parent_category_id') ? $newCategory['parent_category_id'] : null,
                 'is_main' => $newCategory->has('is_main') ? true : false,
-                'active' => $newCategory->has('is_main') ? true : false,
-                'mc_slug' => $newCategory->has('slug') ?  $newCategory['slug'] : Str::slug($newCategory['name']),
+                'active' => $newCategory->has('active') ? true : false,
+                'slug' => $newCategory->has('slug') ?  $newCategory['slug'] : Str::slug($newCategory['name']),
                 'banner' =>  $newCategory->has('banner') ? $banner : null,
-                'image' => $image,
+                'image' => $newCategory->has('image') ? $image : null,
             ]);
 
             //COMMIT DATABASE
@@ -97,10 +99,10 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        $category = Category::find(1);
-        return view('app.admin.categories.show', compact('category'));
+        $parent = $category->parentCategory ? $category->parentCategory->name : "doesn't have a parent";
+        return view('app.admin.categories.show', compact('category', 'parent'));
     }
 
     /**
@@ -109,10 +111,11 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit($id, Category $category)
+    public function edit(Category $category)
     {
-        $category = Category::find($id);
-        return view('app.admin.categories.edit', compact('category'));
+        $mainCategories = Category::Main()->get();
+        // dd($mainCategories[0]->id == $category->parent_category_id);
+        return view('app.admin.categories.edit', compact('category', 'mainCategories'));
     }
 
     /**
@@ -124,53 +127,55 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        return $category;
 
         //Validation of the form is Done Through the MainCategoryRequest Class Container sends it validates the input then returns here
         try {
-            if($category->id !== $request->id)
-            {
+            if ($category->id != $request->id) {
                 throw new Exception;
             }
 
-            $oldCategory = collect($request);
+            $newCategory = collect($request);
 
-            if ($oldCategory->has('parent_category_id') && $oldCategory->has('is_main')) {
-                $oldCategory->forget('is_main');
+            if ($newCategory->has('parent_category_id') && $newCategory->has('is_main')) {
+                $newCategory->forget('is_main');
+            }
+            if ($newCategory->has('is_main')) {
+                $newCategory['is_main'] = 1;
+            }
+            if (!$newCategory->has('slug')) {
+                $newCategory['slug'] = Str::slug($newCategory['name']);
+            }
+            if ($newCategory->has('active')) {
+                $newCategory['active'] = 1;
             }
             // BEGIN DATABASE TRANSACTION
             DB::beginTransaction();
 
-            if ($oldCategory->has('image')) {
-                $image = $this->saveFile($oldCategory['image'], 'image', $oldCategory['name']);
-            } elseif ($oldCategory->has('banner')) {
-                $banner = $this->saveFile($oldCategory['banner'], 'banner', $oldCategory['name']);
+            if ($newCategory->has('image')) {
+                $image = $this->saveFile($newCategory['image'], 'image', $newCategory['name']);
+                $newCategory['image'] = $image;
+                $this->deleteFile($category->image);
+            } elseif ($newCategory->has('banner')) {
+                $banner = $this->saveFile($newCategory['banner'], 'banner', $newCategory['name']);
+                $newCategory['banner'] = $banner;
+                $this->deleteFile($category->banner);
             }
-            // oldCategory->update([
-            //     'name' => $newCategory['name'],
-            //     'description' => $newCategory['description'],
-            //     'parent_category_id	' =>  $newCategory->has('parent_category_id') ? $newCategory['parent_category_id'] : '',
-            //     'is_main' => $newCategory->has('is_main') ? true : false,
-            //     'active' => $newCategory->has('is_main') ? true : false,
-            //     'mc_slug' => $newCategory->has('slug') ?  $newCategory['slug'] : Str::slug($newCategory['name']),
-            //     'banner' =>  $newCategory->has('banner') ? $banner : null,
-            //     'image' => $image,
-            // ]);
+
+            $category->update($newCategory->toArray());
 
             // //COMMIT DATABASE
-            // DB::commit();
+            DB::commit();
 
-            // return redirect()->route('admin.categories')->with(['success' => 'new category Created']);
+            return redirect()->route('admin.categories')->with(['success' => 'Category Updated']);
         } catch (\Exception $e) {
             //ROLLBACK DATABASE
-            // DB::rollback();
-            // if (isset($image)) {
-            //     Storage::disk('categories')->delete($image);
-            // } elseif (isset($banner)) {
-            //     Storage::disk('categories')->delete($banner);
-            // }
-            // dd($e);
-            // return redirect()->route('admin.categories')->with(['error' => 'there was an error']);
+            DB::rollback();
+            if (isset($image)) {
+                Storage::disk('categories')->delete($image);
+            } elseif (isset($banner)) {
+                Storage::disk('categories')->delete($banner);
+            }
+            return redirect()->route('admin.categories')->with(['error' => 'there was an error']);
         }
     }
 
@@ -182,9 +187,23 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        try {
+            $this->deleteFile($category->image);
+            $category->delete();
+            return redirect()->route('admin.categories')->with(['success' => 'Category Deleted']);
+        } catch (Exception $e) {
+            return redirect()->route('admin.categories')->with(['error' => 'there was an error']);
+        }
     }
 
+    /**
+     * Saves the File to Storage and puts an entry for it in the DB
+     *
+     * @param \Illuminate\Http\UploadedFile $file the File
+     * @param  string $usage the use of this file
+     * @param  string $name the name to give this file in the DB
+     * @return string Image hash
+     */
     public function saveFile($file, $usage, $name)
     {
         $image = uploadImage('categories', $file);
@@ -197,5 +216,16 @@ class CategoryController extends Controller
             'usage' => $usage,
         ]);
         return $image;
+    }
+
+    /**
+     * softs delete a File
+     *
+     * @param  string  $fileName
+     * @return void
+     */
+    public function deleteFile($fileName)
+    {
+        Files::where('file_name', '=', $fileName)->delete();
     }
 }
