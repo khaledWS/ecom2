@@ -1,11 +1,16 @@
-@extends('layouts.admin.admin')
+@extends('layouts.admin')
 
 @section('content')
     <div class="content-wrapper">
         <!--------------------------- Navigagion breadcrumps header -------------------------->
-        @include('admin.components.breadcrumps-header',
-        ['current' => "الباعة", 'index' => ""])
+        @include('app.admin.components.breadcrumps-header', [
+            'current' => 'Vendors',
+            'sectionRoute' => 'admin.vendors',
+            'index' => 'admin.vendors.create',
+        ])
         <!--------------------------- END Navigagion breadcrumps header -------------------------->
+
+
         <div class="content-body">
             <!-- DOM - jQuery events table -->
             <section id="dom">
@@ -14,87 +19,124 @@
                         <!--------------------------- Card -------------------------->
                         <div class="card">
                             <!--------------------------- Card Header -------------------------->
-                            @include('admin.maincategories.components.card-header',
-                            ['cardHeader' =>"قائمة الباعة"])
+                            @include('app.admin.components.card-header', [
+                                'cardHeader' => __('Vendors'),
+                            ])
                             <!--------------------------- END Card Header -------------------------->
 
-
                             <!-------------------- Alerts -------------------->
-                            @include('admin.includes.alerts.success')
-                            @include('admin.includes.alerts.errors')
+                            @include('layouts.includes.alerts.success')
+                            @include('layouts.includes.alerts.errors')
                             <!-------------------- END Alerts -------------------->
-                            <!-------------------- Card Content -------------------->
 
+                            <!-------------------- Card Content -------------------->
                             <div class="card-content collapse show overflow-auto">
-                                <div class="card-body card-dashboard overflow-auto">
-                                    <table class="table display nowrap table-striped table-bordered ">
+                                <div class="card-body card-dashboard ">
+                                    <table class="table display nowrap table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>الأسم</th>
-                                                <th>البريد الالكتروني</th>
-                                                <th>الهاتف</th>
-                                                <th>العنوان</th>
-                                                <th>القسم الرئيسي</th>
-                                                <th>اشتراك</th>
-                                                <th>الشعار</th>
-                                                <th>الحالة</th>
-                                                <th>الإجراءات</th>
+                                                <th class="col-1">status</th>
+                                                <th>name</th>
+                                                <th>description</th>
+                                                <th class="col-1">actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @isset($dataset)
-                                                @foreach ($dataset as $row)
+                                            @isset($vendors)
+                                                @foreach ($vendors as $vendor)
                                                     <tr>
-                                                        <td>{{ $row->name }}</td>
-                                                        <td>{{ $row->email }}</td>
-                                                        <td>{{ $row->mobile }}</td>
-                                                        <td>{{ $row->address }}</td>
-                                                        <td>{{ $row->main_category_id }}</td>
-                                                        <td>{{ $row->subscription_id }}</td>
-                                                        <td>
-                                                            <img class="img-thumbnai img-fluid rounded-circle width-150 height-150"
-                                                                src="{{ $row->getPhoto() }}" alt="">
-                                                        </td>
-
-                                                        <td>
-                                                            @if ($row->status)
-                                                                <div class=" p-0 alert alert-success">Active</div>
-                                                            @else
-                                                                <div class="alert alert-danger">Not</div>
+                                                        <td class="small">
+                                                            @if ($vendor->active)
+                                                                <div class="badge badge-success">active</div>
+                                                            @elseif (!$vendor->active)
+                                                                <div class="badge badge-danger">not active</div>
+                                                            @endif
+                                                            @if ($vendor->status)
+                                                                <div class="badge badge-info">{{ $vendor->status }}</div>
+                                                            @endif
+                                                            @if ($vendor->featured)
+                                                                <div class="badge badge-info">{{ $vendor->featured }}</div>
                                                             @endif
                                                         </td>
 
+                                                        <td><a href="{{ route('admin.vendors.show', $vendor->id) }}">
+                                                                {{ $vendor->name }}</a></td>
+
+                                                        <td>{{ $vendor->description }}</td>
                                                         <td>
                                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                                <a href="{{ route('admin.vendors.edit', $row->id) }}"
-                                                                    class="btn btn-outline-primary btn-min-width box-shadow-3 mr-1 mb-1">تعديل</a>
-
-                                                                <a href="{{ route('admin.vendors.delete', $row->id) }}"
-                                                                    class="btn btn-outline-danger btn-min-width box-shadow-3 mr-1 mb-1"
-                                                                    id="delte-link">حذف</a>
-
-                                                                <a href="{{ url('/shop/vendor/' . $row->mc_slug) }}"
-                                                                    class="btn btn-outline-info btn-min-width box-shadow-3 mr-1 mb-1"
-                                                                    id="visit-link">زر</a>
-                                                                {{-- </form> --}}
+                                                                <a href="{{ route('admin.vendors.edit', $vendor->id) }}"><button
+                                                                        type="button"
+                                                                        class="btn btn-info btn-round mr-1 mb-1 px-1">Edit</button></a>
+                                                                <a><button type="button"
+                                                                        class="btn btn-danger btn-round mr-1 mb-1 px-1"
+                                                                        data-toggle="modal"
+                                                                        data-target="#danger">Delete</button></a>
                                                             </div>
                                                         </td>
                                                     </tr>
+                                                    <div class="modal fade text-left" id="danger" tabindex="-1" role="dialog"
+                                                        aria-labelledby="myModalLabel10" style="display: none;"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header bg-danger white">
+                                                                    <h4 class="modal-title white" id="myModalLabel10">You are
+                                                                        about to
+                                                                        Delete an Item</h4>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">×</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <h5>are you sure you want to Delete this vendor</h5>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn grey btn-outline-secondary"
+                                                                        data-dismiss="modal">Close</button>
+                                                                    <a
+                                                                        href="{{ route('admin.vendors.destroy', $vendor->id) }}">
+                                                                        <button type="button"
+                                                                            class="btn btn-outline-danger">Delete</button></a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 @endforeach
-                                            </tbody>
-                                        </table>
-
+                                            @endisset
+                                        </tbody>
+                                    </table>
+                                    @isset($vendors)
                                         <div class="justify-content-center d-flex mt-5">
-                                            {{ $dataset->links() }}
+                                            {{ $vendors->links() }}
                                         </div>
                                     @endisset
+
+
                                 </div>
                             </div>
                             <!-------------------- END Card Content -------------------->
                         </div>
+                        <!--------------------------- END Card -------------------------->
                     </div>
                 </div>
             </section>
         </div>
     </div>
+@endsection
+
+@section('page-css')
+    <!-- BEGIN PAGE VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/selects/select2.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/animate/animate.css') }}">
+    <!-- BEGIN Page Level CSS-->
+@endsection
+
+@section('page-script')
+    <!-- BEGIN PAGE VENDOR JS-->
+    <script src="{{ asset('app-assets/vendors/js/forms/select/select2.full.min.js') }}" type="text/javascript"></script>
+    <!-- BEGIN PAGE LEVEL JS-->
+    <script src="{{ asset('app-assets/js/scripts/forms/select/form-select2.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('app-assets/js/scripts/modal/components-modal.js') }}" type="text/javascript"></script>
 @endsection

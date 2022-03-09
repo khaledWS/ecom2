@@ -15,7 +15,7 @@ class VendorController extends Controller
      */
     public function index()
     {
-        //
+        return view('app.admin.vendors.index');
     }
 
     /**
@@ -25,7 +25,8 @@ class VendorController extends Controller
      */
     public function create()
     {
-        //
+
+        return view('app.admin.vendors.create');
     }
 
     /**
@@ -36,7 +37,7 @@ class VendorController extends Controller
      */
     public function store(StoreVendorRequest $request)
     {
-        //
+        return $request;
     }
 
     /**
@@ -45,9 +46,8 @@ class VendorController extends Controller
      * @param  \App\Models\Vendor  $vendor
      * @return \Illuminate\Http\Response
      */
-    public function show(Vendor $vendor)
+    public function show(vendor $vendor)
     {
-        //
     }
 
     /**

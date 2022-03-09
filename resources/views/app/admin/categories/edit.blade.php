@@ -27,7 +27,7 @@
                             <!-------------------- END Alerts -------------------->
 
                             <!-------------------- Card Content -------------------->
-                            @include('app.admin.vendors.components.card-content',[
+                            @include('app.admin.categories.components.card-content',[
                             'formPostRouteName' => 'admin.categories.update',
                             'formPostRoutePara' => $category->id,
                             'mainCategories' => $mainCategories,

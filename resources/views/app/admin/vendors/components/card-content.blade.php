@@ -6,9 +6,9 @@
             @csrf
 
             <div class="form-body">
-                <h5 class="form-section"><i class="ft-info"></i> Category information </h5>
+                <h5 class="form-section"><i class="ft-info"></i> Vendor information </h5>
                 @if ($job == 'edit')
-                    <input type="hidden" name="id" value="{{ $category->id }}">
+                    <input type="hidden" name="id" value="{{ $Vendor->id }}">
                 @endif
 
                 <!--------------------------- Row 1 -------------------------->
@@ -20,8 +20,8 @@
                             <label for="name"> name </label>
                             <div class="input-group">
                                 <input oninput="getSlug()" type="text" id="name" class="form-control"
-                                    @if ($job == 'edit') value = "{{ $category->name }}" @else value = "{{ old('name') }}" @endif
-                                    placeholder="name of the Category" name="name">
+                                    @if ($job == 'edit') value = "{{ $Vendor->name }}" @else value = "{{ old('name') }}" @endif
+                                    placeholder="Vendor name" name="name">
                             </div>
                             @error('name')
                                 <span class="text-danger">{{ $message }}</span>
@@ -35,25 +35,17 @@
                             <label for="slug"> slug</label>
                             <div class="input-group">
                                 <div id="for-test" onclick='myTest()' class="input-group-prepend">
-                                    {{-- <span class="input-group-text" id="basic-addon1">@</span> --}}
                                     <button type="button" class="btn btn-info">
                                         <i class="la la-paper-plane"></i>
                                     </button>
                                 </div>
-                                {{-- <input hidden type="text" id="slug" class="form-control w-full" placeholder="slug" name="slug"
-                                    aria-describedby="basic-addon1"
-                                    @if ($job == 'edit') value = "{{ $category->slug }}" @else value = "{{ old('slug') }}" @endif
-                                    readonly> --}}
-                                {{-- <button type="button" class="btn btn-primary">
-                                        <i class="la la-paper-plane"></i>
-                                      </button> --}}
                                 <p class='form-control alert-blue-grey' id='slug'>
                                     @if ($job == 'edit')
-                                        {{ $category->slug }}
+                                        {{ $Vendor->slug }}
                                     @else
-                                        {{ old('slug') }} @endif
+                                        {{ old('slug') }}
+                                    @endif
                                 </p>
-
                             </div>
                             @error('slug')
                                 <span class="text-danger">{{ $message }}</span>
@@ -72,10 +64,9 @@
                     <div class="col-md-6">
                         <!------------ main category field --------------->
                         <div class="form-group">
-                            <label for="is_main">is Main</label>
-                            <label for="parent_category_id">&ensp;&ensp;Parent</label>
-                            <div onload="setAtt()" class="input-group">
-                                <div class="input-group-prepend">
+                            <label for="category">Category</label>
+                            <div @if ($job == 'edit') onload="setAtt()" @endif class="input-group">
+                                {{-- <div class="input-group-prepend">
                                     <span class="input-group-text">
                                         <div id="test" class="skin skin-flat">
                                             <input type="checkbox" id="is_main" class="form-control"
@@ -85,41 +76,67 @@
                                             <div onclick="isChecked()" class="hidden"></div>
                                         </div>
                                     </span>
-                                </div>
+                                </div> --}}
                                 {{-- <input type="text"> --}}
-                                <select placeholder="Select the Parent Category" id="parent_category_id"
-                                    name="parent_category_id" class="select2 form-control"
-                                    @if ($job == 'edit') value = "{{ $category->parent_category_id }}" @else value = "{{ old('parent_category_id') }}" @endif>
-                                    <option value="" disabled selected>Select the Parent</option>
+                                <select placeholder="Select the main Category" id="category" name="category"
+                                    class="select2 form-control"
+                                    @if ($job == 'edit') value = "{{ $vendor->category }}" @else value = "{{ old('category') }}" @endif>
+                                    <option value="" disabled selected>Select the Category</option>
                                     <optgroup label="Category Name">
                                         @isset($mainCategories)
                                             @foreach ($mainCategories as $mainCategory)
-                                                <option @if ($job == 'edit' && $category->parent_category_id == $mainCategory->id) selected @endif
+                                                <option @if ($job == 'edit' && $vendor->category == $mainCategory->id) selected @endif
                                                     value="{{ $mainCategory->id }}">{{ $mainCategory->name }}</option>
                                             @endforeach
                                         @endisset
                                     </optgroup>
                                 </select>
                             </div>
-                            @error('parent_category_id')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <!------------ description field --------------->
-                        <div class="form-group">
-                            <label for="description"> description</label>
-                            <input type="description" id="description" class="form-control"
-                                @if ($job == 'edit') value = "{{ $category->description }}" @else value = "{{ old('description') }}" @endif
-                                placeholder="description" name="description">
-                            @error('description')
+                            @error('category')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
 
                     <!------------------ Col 2-2 -------------------->
+                    <div class="col-md-6">
+                        <!------------ main category field --------------->
+                        <div class="form-group hidden">
+                            <label for="categories">sub Categories</label>
+                            <div @if ($job == 'edit') onload="setAtt()" @endif class="input-group">
+                                {{-- <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <div id="test" class="skin skin-flat">
+                                                            <input type="checkbox" id="is_main" class="form-control"
+                                                                @if ($job == 'edit') @if ($category->is_main) checked value = "{{ $category->is_main }}" @endif
+                                                            @else value="{{ old('is_main') }}" @endif
+                                                            placeholder="" name="is_main">
+                                                            <div onclick="isChecked()" class="hidden"></div>
+                                                        </div>
+                                                    </span>
+                                                </div> --}}
+                                {{-- <input type="text"> --}}
+                                <select placeholder="Select the sub categories" id="categories" name="categories"
+                                    class="select2 form-control"
+                                    @if ($job == 'edit') value = "{{ $vendor->categories }}" @else value = "{{ old('categories') }}" @endif>
+                                    <option value="" disabled selected>Select the categories</option>
+                                    <optgroup label="categories Name">
+                                        @isset($subCategories)
+                                            @foreach ($subCategories as $subCategory)
+                                                <option @if ($job == 'edit' && $vendor->categories == $subCategories->id) selected @endif
+                                                    value="{{ $subCategories->id }}">{{ $subCategories->name }}
+                                                </option>
+                                            @endforeach
+                                        @endisset
+                                    </optgroup>
+                                </select>
+                            </div>
+                            @error('categories')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
 
                 </div>
                 <!--------------------------- END Row 2 -------------------------->
@@ -127,12 +144,81 @@
                 <!--------------------------- Row 3 -------------------------->
                 <div class="row">
                     <div class="col-md-6">
+                        <!------------ user field --------------->
+                        <div class="form-group">
+                            <label for="user"> User </label>
+                            <div class="input-group">
+                                <input type="text" id="user" class="form-control"
+                                    @if ($job == 'edit') value = "{{ $Vendor->user }}" @else value = "{{ old('user') }}" @endif
+                                    placeholder="main user name" name="user">
+                            </div>
+                            @error('user')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+
+                </div>
+                <!--------------------------- END Row 3 -------------------------->
+
+
+                <!--------------------------- Row 4 -------------------------->
+                <div class="row">
+                    <!------------------ Col 4-1 -------------------->
+                    <div class="col-md-6">
+                        <!------------ description field --------------->
+                        <div class="form-group">
+                            <label for="description"> description</label>
+                            <input type="description" id="description" class="form-control"
+                                @if ($job == 'edit') value = "{{ $vendor->description }}" @else value = "{{ old('description') }}" @endif
+                                placeholder="description" name="description">
+                            @error('description')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <!------------------ Col 4-2 -------------------->
+                    <div class="col-md-6">
+                        <!------------ main category field --------------->
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <div @if ($job == 'edit')  @endif class="input-group">
+                                <select placeholder="Select the Status" id="status" name="status"
+                                    class="select2 form-control"
+                                    @if ($job == 'edit') value = "{{ $vendor->status }}" @else value = "{{ old('status') }}" @endif>
+                                    <option value="" disabled selected>Select the status</option>
+                                    <optgroup label="status list">
+                                        @isset($statusList)
+                                            @foreach ($statusList as $status)
+                                                <option @if ($job == 'edit' && $vendor->status == $status->id) selected @endif
+                                                    value="{{ $status->id }}">{{ $status->name }}</option>
+                                            @endforeach
+                                        @endisset
+                                    </optgroup>
+                                </select>
+                            </div>
+                            @error('status')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                </div>
+                <!--------------------------- END Row 4 -------------------------->
+
+
+                <!--------------------------- Row 5 -------------------------->
+                <div class="row">
+                    <!------------------ Col 5-1 -------------------->
+                    <div class="col-md-6">
+                        <!------------ Active field --------------->
                         <div class="form-group">
                             <label class="block" for="active">Active</label>
                             <input hidden type="checkbox"
-                                @if ($job == 'edit') value = "{{ $category->active }}" @else value = "{{ old('active') }}" @endif
+                                @if ($job == 'edit') value = "{{ $vendor->active }}" @else value = "{{ old('active') }}" @endif
                                 name=" active" id="" class="switch form-control block"
-                                @if ($job == 'edit') @if ($category->active == 1) checked @endif
+                                @if ($job == 'edit') @if ($vendor->active == 1) checked @endif
                                 @endif
                             />
                             @error('active')
@@ -140,33 +226,84 @@
                             @enderror
                         </div>
                     </div>
-
+                    <!------------------ Col 5-2 -------------------->
                     <div class="col-md-6">
-                        <!------------ logo field --------------->
+                        <!------------ Featured field --------------->
                         <div class="form-group">
-                            <label for="image">image</label>
+                            <label for="featured">Featured</label>
+                            <div @if ($job == 'edit')  @endif class="input-group">
+                                <select placeholder="Select the Status" id="featured" name="featured"
+                                    class="select2 form-control"
+                                    @if ($job == 'edit') value = "{{ $vendor->featured }}" @else value = "{{ old('featured') }}" @endif>
+                                    <option value="" disabled selected>Select the featured</option>
+                                    <optgroup label="featured list">
+                                        @isset($featuredList)
+                                            @foreach ($featuredList as $featured)
+                                                <option @if ($job == 'edit' && $vendor->status == $featured->name) selected @endif
+                                                    value="{{ $featured->name }}">{{ $featured->name }}</option>
+                                            @endforeach
+                                        @endisset
+                                    </optgroup>
+                                </select>
+                            </div>
+                            @error('status')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                </div>
+                <!--------------------------- END Row 5 -------------------------->
+                <!--------------------------- Row 6 -------------------------->
+                <div class="row">
+                    <!---------------------------6-1 -------------------------->
+                    <div class="col-md-6">
+                        <!------------ profile field --------------->
+                        <div class="form-group">
+                            <label for="profile">profile</label>
                             <div style="cursor: pointer;" class="custom-file" role='button'>
                                 <input onchange="getFileData(this)" role='button'
                                     class="form-control custom-file-input mt-1" type="file" id="inputGroupFile01"
-                                    name="image"
-                                    @if ($job == 'edit') value = "{{ $category->image }}" @else value = "{{ old('image') }}" @endif>
+                                    name="profile"
+                                    @if ($job == 'edit') value = "{{ $vendor->profile }}" @else value = "{{ old('profile') }}" @endif>
                                 <label id="fileLabel" class="custom-file-label" for="inputGroupFile01">Choose
                                     File</label>
                                 {{-- <span class="file-custom"></span> --}}
                             </div>
-                            @error('image')
+                            @error('profile')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
                         @if ($job == 'edit')
-                            <img src="{{ $category->getImage() }}" alt="{{ $category->name }}-photo"
+                            <img src="{{ $vendor->getProfile() }}" alt="{{ $vendor->name }}-photo"
                                 class="img-fluid rounded-circle width-150 height-150">
                         @endif
                     </div>
-
+                    <!---------------------------6-2 -------------------------->
+                    <div class="col-md-6">
+                        <!------------ profile field --------------->
+                        <div class="form-group">
+                            <label for="banner">banner</label>
+                            <div style="cursor: pointer;" class="custom-file" role='button'>
+                                <input onchange="getFileData(this)" role='button'
+                                    class="form-control custom-file-input mt-1" type="file" id="inputGroupFile01"
+                                    name="banner"
+                                    @if ($job == 'edit') value = "{{ $vendor->banner }}" @else value = "{{ old('banner') }}" @endif>
+                                <label id="fileLabel" class="custom-file-label" for="inputGroupFile01">Choose
+                                    File</label>
+                                {{-- <span class="file-custom"></span> --}}
+                            </div>
+                            @error('banner')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        @if ($job == 'edit')
+                            <img src="{{ $vendor->getBanner() }}" alt="{{ $vendor->name }}-photo"
+                                class="img-fluid rounded-circle width-150 height-150">
+                        @endif
+                    </div>
                 </div>
-                <!--------------------------- END Row 3 -------------------------->
-
+                <!--------------------------- END Row 6 -------------------------->
 
 
                 <!--------------------------- Actions -------------------------->
@@ -288,31 +425,6 @@
                 textBox1Val = document.getElementById("name").value;
                 document.getElementById("slug").setAttribute('value', string_to_slug(textBox1Val));
                 $('#basic-addon1').removeClass('border-3');
-            }
-        }
-
-        function myTest() {
-            inputElem = "<input type='text' id='slug' class='form-control w-full' placeholder= 'slug' name='slug' aria-describedby='basic-addon1' @if ($job == 'edit') value = '{{ $category->slug }}' @else value = '{{ old('slug') }}' @endif>"
-            // slugText = "<p class='form-control' id ='slug'></p>";
-            slugText =  "<p class='form-control alert-blue-grey' id='slug'> @if ($job == 'edit'){{ $category->slug }}@else{{ old('slug') }}@endif</p>";
-            // @if ($job == 'edit')
-            //     {{ $category->slug }}@else{{ old('slug') }}
-            // @endif <
-            //     /p>";
-            if (slugOn == 0) {
-                $('#slug').replaceWith(inputElem);
-                $('#slug').val("");
-                document.getElementById("name").removeAttribute('oninput');
-                document.getElementById('slug-info').setAttribute('hidden', '');
-                // $('#slug-info').setAtt();
-                slugOn = 1;
-            } else {
-                document.getElementById('slug-info').removeAttribute('hidden');
-                textBox1Val = document.getElementById("name").value;
-                $('#slug').replaceWith(slugText);
-                document.getElementById("name").setAttribute('oninput', 'getSlug()');
-                $('#slug').html(string_to_slug(textBox1Val));
-                slugOn = 0;
             }
         }
     </script>

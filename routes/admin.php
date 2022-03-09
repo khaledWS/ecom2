@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -66,19 +67,19 @@ Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function ()
     // });
 
 
-       //Product routes
-       Route::prefix('vendor')->group(function () {
+    //Product routes
+    Route::prefix('vendor')->group(function () {
         //index
-        Route::get('/', [ProductController::class, 'index'])->name('admin.vendors');
+        Route::get('/', [VendorController::class, 'index'])->name('admin.vendors');
         //Show
-        Route::get('/{vendor}', [ProductController::class, 'show'])->name('admin.vendors.show');
+        // Route::get('/{vendor}', [VendorController::class, 'show'])->name('admin.vendors.show');
         //new
-        Route::get('/create', [ProductController::class, 'create'])->name('admin.vendors.create');
-        Route::post('/store', [ProductController::class, 'store'])->name('admin.vendors.store');
+        Route::get('/create', [VendorController::class, 'create'])->name('admin.vendors.create');
+        Route::post('/store', [VendorController::class, 'store'])->name('admin.vendors.store');
         //Edit
-        Route::get('/edit/{vendor}', [ProductController::class, 'edit'])->name('admin.vendors.edit');
-        Route::post('/update/{vendor}', [ProductController::class, 'update'])->name('admin.vendors.update');
+        Route::get('/edit/{Vendor}', [VendorController::class, 'edit'])->name('admin.vendors.edit');
+        Route::post('/update/{Vendor}', [VendorController::class, 'update'])->name('admin.vendors.update');
         //Delete
-        Route::get('/delete/{vendor}', [ProductController::class, 'destroy'])->name('admin.vendors.destroy');
+        Route::get('/delete/{Vendors}', [VendorController::class, 'destroy'])->name('admin.vendors.destroy');
     });
 });

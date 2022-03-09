@@ -1,12 +1,12 @@
-@extends('layouts.admin.admin')
+@extends('layouts.admin')
 
 @section('content')
     <div class="content-wrapper">
         <!--------------------------- Navigagion breadcrumps header -------------------------->
-        @include('admin.components.breadcrumps-header',[
-        'section' => "المتاجر",
-        'sectionRoute' => "admin.vendors",
-        'current' =>"تعديل $vendor->name"
+        @include('app.admin.components.breadcrumps-header',[
+        'section' => "Categories",
+        'current' =>"Edit",
+        'sectionRoute' => "admin.categories"
         ])
         <!--------------------------- END Navigagion breadcrumps header -------------------------->
 
@@ -17,19 +17,19 @@
                         <!--------------------------- Card -------------------------->
                         <div class="card">
                             <!--------------------------- Card Header -------------------------->
-                            @include('admin.maincategories.components.card-header',
-                            ['cardHeader' =>"تعديل متجر"])
+                            @include('app.admin.components.card-header',
+                            ['cardHeader' =>"Edit Category"])
                             <!--------------------------- END Card Header -------------------------->
 
                             <!-------------------- Alerts -------------------->
-                            @include('admin.includes.alerts.success')
-                            @include('admin.includes.alerts.errors')
+                            @include('layouts.includes.alerts.success')
+                            @include('layouts.includes.alerts.errors')
                             <!-------------------- END Alerts -------------------->
 
                             <!-------------------- Card Content -------------------->
-                            @include('admin.vendors.components.card-content',[
-                            'formPostRouteName' => 'admin.vendors.update',
-                            'formPostRoutePara' => $vendor->id,
+                            @include('app.admin.vendors.components.card-content',[
+                            'formPostRouteName' => 'admin.categories.update',
+                            'formPostRoutePara' => $category->id,
                             'mainCategories' => $mainCategories,
                             'job' => 'edit',
                             ])

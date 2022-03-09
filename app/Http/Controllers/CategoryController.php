@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Livewire\WithPagination;
 
 class CategoryController extends Controller
 {
@@ -19,7 +18,6 @@ class CategoryController extends Controller
     {
         //VALIDATE AUTHORIZATION
     }
-    use WithPagination;
     /**
      * Display a listing of the Categories.
      *

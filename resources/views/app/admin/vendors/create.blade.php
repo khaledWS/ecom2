@@ -1,11 +1,11 @@
-@extends('layouts.admin.admin')
+@extends('layouts.admin')
 
 @section('content')
     <div class="content-wrapper">
         <!--------------------------- Navigagion breadcrumps header -------------------------->
-        @include('admin.components.breadcrumps-header',[
-        'section' => "الباعة",
-        'current' =>"جديد",
+        @include('app.admin.components.breadcrumps-header',[
+        'section' => "vendors",
+        'current' =>"create",
         'sectionRoute' => "admin.vendors"
         ])
         <!--------------------------- END Navigagion breadcrumps header -------------------------->
@@ -17,20 +17,22 @@
                         <!--------------------------- Card -------------------------->
                         <div class="card">
                             <!--------------------------- Card Header -------------------------->
-                            @include('admin.maincategories.components.card-header',
-                            ['cardHeader' =>"اضافة متجر"])
+                            @include('app.admin.components.card-header',
+                            ['cardHeader' =>"Add a new vendor"])
                             <!--------------------------- END Card Header -------------------------->
 
                             <!-------------------- Alerts -------------------->
-                            @include('admin.includes.alerts.success')
-                            @include('admin.includes.alerts.errors')
+                            @include('layouts.includes.alerts.success')
+                            @include('layouts.includes.alerts.errors')
                             <!-------------------- END Alerts -------------------->
 
                             <!-------------------- Card Content -------------------->
-                            @include('admin.vendors.components.card-content',[
+                            @include('app.admin.vendors.components.card-content',[
                             'formPostRouteName' => 'admin.vendors.store',
                             'formPostRoutePara' => '',
-                            'mainCategories' => $mainCategories,
+                            'mainCategories' => [],
+                            'statusList' => [],
+                            'featuredList' => [],
                             'job' => 'create',
                             ])
                             <!-------------------- END Card Content -------------------->

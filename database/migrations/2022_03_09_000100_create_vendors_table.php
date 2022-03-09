@@ -18,16 +18,16 @@ return new class extends Migration
             $table->timestamps();
             $table->string('name',200);
             $table->string('slug',300)->nullable();
-            $table->foreignIdFor('category','category_id');
+            $table->foreignId('category_id');
             $table->text('categories');
-            $table->foreignId('user');
+            $table->foreignId('user_id');
             $table->text('staff');
             $table->text('description')->nullable();
             $table->boolean('active')->default(false);
             $table->text('profile')->comment('main Picture');
             $table->text('banner')->comment('banner');
             $table->boolean('status')->nullable();
-            $table->string('Featured')->nullable()->comment('different Levels');
+            $table->string('featured')->nullable()->comment('different Levels');
             $table->softDeletes();
         });
     }
