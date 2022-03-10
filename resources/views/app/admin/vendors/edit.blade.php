@@ -4,9 +4,9 @@
     <div class="content-wrapper">
         <!--------------------------- Navigagion breadcrumps header -------------------------->
         @include('app.admin.components.breadcrumps-header',[
-        'section' => "Categories",
+        'section' => "vendors",
         'current' =>"Edit",
-        'sectionRoute' => "admin.categories"
+        'sectionRoute' => "admin.vendors"
         ])
         <!--------------------------- END Navigagion breadcrumps header -------------------------->
 
@@ -18,7 +18,7 @@
                         <div class="card">
                             <!--------------------------- Card Header -------------------------->
                             @include('app.admin.components.card-header',
-                            ['cardHeader' =>"Edit Category"])
+                            ['cardHeader' =>"Edit vendor"])
                             <!--------------------------- END Card Header -------------------------->
 
                             <!-------------------- Alerts -------------------->
@@ -28,9 +28,13 @@
 
                             <!-------------------- Card Content -------------------->
                             @include('app.admin.vendors.components.card-content',[
-                            'formPostRouteName' => 'admin.categories.update',
-                            'formPostRoutePara' => $category->id,
+                            'formPostRouteName' => 'admin.vendors.update',
+                            'formPostRoutePara' => $vendor->id,
                             'mainCategories' => $mainCategories,
+                            'mainCategories' => $mainCategories,
+                            'statusList' => $featuredList,
+                            'featuredList' => $statusList,
+                            'vendors' => $vendors,
                             'job' => 'edit',
                             ])
                             <!-------------------- END Card Content -------------------->

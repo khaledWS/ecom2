@@ -68,18 +68,20 @@ Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function ()
 
 
     //Product routes
-    Route::prefix('vendor')->group(function () {
+    Route::prefix('vendors')->group(function () {
         //index
         Route::get('/', [VendorController::class, 'index'])->name('admin.vendors');
-        //Show
-        // Route::get('/{vendor}', [VendorController::class, 'show'])->name('admin.vendors.show');
-        //new
+        //create
         Route::get('/create', [VendorController::class, 'create'])->name('admin.vendors.create');
+        //store
         Route::post('/store', [VendorController::class, 'store'])->name('admin.vendors.store');
-        //Edit
-        Route::get('/edit/{Vendor}', [VendorController::class, 'edit'])->name('admin.vendors.edit');
-        Route::post('/update/{Vendor}', [VendorController::class, 'update'])->name('admin.vendors.update');
+        //show
+        Route::get('/{vendor}',[VendorController::class, 'show'])->name('admin.vendors.show');
+        //edit
+        Route::get('/edit/{vendor}', [VendorController::class, 'edit'])->name('admin.vendors.edit');
+        //update
+        Route::post('/update/{vendor}', [VendorController::class, 'update'])->name('admin.vendors.update');
         //Delete
-        Route::get('/delete/{Vendors}', [VendorController::class, 'destroy'])->name('admin.vendors.destroy');
+        Route::get('/delete/{vendor}', [VendorController::class, 'destroy'])->name('admin.vendors.destroy');
     });
 });

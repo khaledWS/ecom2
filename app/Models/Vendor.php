@@ -11,7 +11,7 @@ class Vendor extends Model
     use HasFactory, SoftDeletes;
 
 
-     /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var string[]
@@ -19,7 +19,7 @@ class Vendor extends Model
     protected $fillable = [
         'name',
         'slug',
-        'category',
+        'categories',
         'category_id',
         'user_id',
         'staff',
@@ -31,21 +31,80 @@ class Vendor extends Model
         'featured'
     ];
 
-    //The List of what could be on the Featured
-    public $FeaturedList = [
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'categories' => 'array',
+        'staff' => 'array',
+    ];
+
+    /**
+     * the list of possible values for the Featured Attribute.
+     *
+     * @var array
+     */
+    protected static $FeaturedList = [
         'main-page',
         'category-page',
         'sub-category-page',
         'mail-feed',
     ];
 
-    //The List of what could be on the Status
-    public $StatusList = [
+
+    /**
+     * the list of possible values for the Status Attribute.
+     *
+     * @var array
+     */
+    protected static $StatusList = [
         'out-of-stock',
         'not-working',
         'stopped-working',
     ];
 
+    public static function getFeaturedList()
+    {
+        return self::$FeaturedList;
+    }
 
+    public static function getStatusList()
+    {
+        return self::$StatusList;
+    }
 
+    public function getBanner()
+    {
+        //   return getPhotoPath($this->banner, 'vendors');
+        return "test";
+    }
+
+    public function getProfile()
+    {
+        //   return getPhotoPath($this->profile, 'vendors');
+        return "test";
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class,'id','user_id');
+    }
+
+    public function getStaff()
+    {
+        return User::find($this->staff);
+    }
+
+    public function category()
+    {
+        return $this->hasOne(Category::class,'id','category_id');
+    }
+
+    public function getCategories()
+    {
+        return Category::find($this->categories);
+    }
 }

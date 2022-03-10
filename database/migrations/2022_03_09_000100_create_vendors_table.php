@@ -19,14 +19,14 @@ return new class extends Migration
             $table->string('name',200);
             $table->string('slug',300)->nullable();
             $table->foreignId('category_id');
-            $table->text('categories');
+            $table->text('categories')->nullable();
             $table->foreignId('user_id');
-            $table->text('staff');
+            $table->text('staff')->nullable();
             $table->text('description')->nullable();
             $table->boolean('active')->default(false);
             $table->text('profile')->comment('main Picture');
             $table->text('banner')->comment('banner');
-            $table->boolean('status')->nullable();
+            $table->string('status')->nullable();
             $table->string('featured')->nullable()->comment('different Levels');
             $table->softDeletes();
         });

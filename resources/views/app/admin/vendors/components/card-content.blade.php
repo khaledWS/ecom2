@@ -8,7 +8,7 @@
             <div class="form-body">
                 <h5 class="form-section"><i class="ft-info"></i> Vendor information </h5>
                 @if ($job == 'edit')
-                    <input type="hidden" name="id" value="{{ $Vendor->id }}">
+                    <input type="hidden" name="id" value="{{ $vendor->id }}">
                 @endif
 
                 <!--------------------------- Row 1 -------------------------->
@@ -20,7 +20,7 @@
                             <label for="name"> name </label>
                             <div class="input-group">
                                 <input oninput="getSlug()" type="text" id="name" class="form-control"
-                                    @if ($job == 'edit') value = "{{ $Vendor->name }}" @else value = "{{ old('name') }}" @endif
+                                    @if ($job == 'edit') value = "{{ $vendor->name }}" @else value = "{{ old('name') }}" @endif
                                     placeholder="Vendor name" name="name">
                             </div>
                             @error('name')
@@ -41,7 +41,7 @@
                                 </div>
                                 <p class='form-control alert-blue-grey' id='slug'>
                                     @if ($job == 'edit')
-                                        {{ $Vendor->slug }}
+                                        {{ $vendor->slug }}
                                     @else
                                         {{ old('slug') }}
                                     @endif
@@ -80,12 +80,12 @@
                                 {{-- <input type="text"> --}}
                                 <select placeholder="Select the main Category" id="category" name="category"
                                     class="select2 form-control"
-                                    @if ($job == 'edit') value = "{{ $vendor->category }}" @else value = "{{ old('category') }}" @endif>
+                                    @if ($job == 'edit') value = "{{ $vendor->category->id }}" @else value = "{{ old('category') }}" @endif>
                                     <option value="" disabled selected>Select the Category</option>
                                     <optgroup label="Category Name">
                                         @isset($mainCategories)
                                             @foreach ($mainCategories as $mainCategory)
-                                                <option @if ($job == 'edit' && $vendor->category == $mainCategory->id) selected @endif
+                                                <option @if ($job == 'edit' && $vendor->category->id == $mainCategory->id) selected @endif
                                                     value="{{ $mainCategory->id }}">{{ $mainCategory->name }}</option>
                                             @endforeach
                                         @endisset
@@ -103,22 +103,10 @@
                         <!------------ main category field --------------->
                         <div class="form-group hidden">
                             <label for="categories">sub Categories</label>
-                            <div @if ($job == 'edit') onload="setAtt()" @endif class="input-group">
-                                {{-- <div class="input-group-prepend">
-                                                    <span class="input-group-text">
-                                                        <div id="test" class="skin skin-flat">
-                                                            <input type="checkbox" id="is_main" class="form-control"
-                                                                @if ($job == 'edit') @if ($category->is_main) checked value = "{{ $category->is_main }}" @endif
-                                                            @else value="{{ old('is_main') }}" @endif
-                                                            placeholder="" name="is_main">
-                                                            <div onclick="isChecked()" class="hidden"></div>
-                                                        </div>
-                                                    </span>
-                                                </div> --}}
-                                {{-- <input type="text"> --}}
+                            <div @if ($job == 'edit')  @endif class="input-group">
                                 <select placeholder="Select the sub categories" id="categories" name="categories"
                                     class="select2 form-control"
-                                    @if ($job == 'edit') value = "{{ $vendor->categories }}" @else value = "{{ old('categories') }}" @endif>
+                                    @if ($job == 'edit') value = "{{ $vendor->categories[0]}}" @else value = "{{ old('categories') }}" @endif>
                                     <option value="" disabled selected>Select the categories</option>
                                     <optgroup label="categories Name">
                                         @isset($subCategories)
@@ -147,12 +135,22 @@
                         <!------------ user field --------------->
                         <div class="form-group">
                             <label for="user"> User </label>
-                            <div class="input-group">
-                                <input type="text" id="user" class="form-control"
-                                    @if ($job == 'edit') value = "{{ $Vendor->user }}" @else value = "{{ old('user') }}" @endif
-                                    placeholder="main user name" name="user">
+                            <div @if ($job == 'edit') onload="setAtt()" @endif class="input-group">
+                                <select placeholder="Select the User" id="user" name="user" class="select2 form-control"
+                                    @if ($job == 'edit') value = "{{ $vendor->user->id }}" @else value = "{{ old('categories') }}" @endif>
+                                    <option value="" disabled selected>Select the categories</option>
+                                    <optgroup label="vendors">
+                                        @isset($vendors)
+                                            @foreach ($vendors as $staff)
+                                                <option @if ($job == 'edit' && $vendor->user_id == $staff->id) selected @endif
+                                                    value="{{ $staff->id }}">{{ $staff->name }}
+                                                </option>
+                                            @endforeach
+                                        @endisset
+                                    </optgroup>
+                                </select>
                             </div>
-                            @error('user')
+                            @error('user_id')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
@@ -188,14 +186,12 @@
                                     class="select2 form-control"
                                     @if ($job == 'edit') value = "{{ $vendor->status }}" @else value = "{{ old('status') }}" @endif>
                                     <option value="" disabled selected>Select the status</option>
-                                    <optgroup label="status list">
-                                        @isset($statusList)
-                                            @foreach ($statusList as $status)
-                                                <option @if ($job == 'edit' && $vendor->status == $status->id) selected @endif
-                                                    value="{{ $status->id }}">{{ $status->name }}</option>
-                                            @endforeach
-                                        @endisset
-                                    </optgroup>
+                                    @isset($statusList)
+                                        @foreach ($statusList as $status)
+                                            <option @if ($job == 'edit' && $vendor->status == $status) selected @endif
+                                                value="{{ $status }}">{{ $status }}</option>
+                                        @endforeach
+                                    @endisset
                                 </select>
                             </div>
                             @error('status')
@@ -236,14 +232,12 @@
                                     class="select2 form-control"
                                     @if ($job == 'edit') value = "{{ $vendor->featured }}" @else value = "{{ old('featured') }}" @endif>
                                     <option value="" disabled selected>Select the featured</option>
-                                    <optgroup label="featured list">
-                                        @isset($featuredList)
-                                            @foreach ($featuredList as $featured)
-                                                <option @if ($job == 'edit' && $vendor->status == $featured->name) selected @endif
-                                                    value="{{ $featured->name }}">{{ $featured->name }}</option>
-                                            @endforeach
-                                        @endisset
-                                    </optgroup>
+                                    @isset($featuredList)
+                                        @foreach ($featuredList as $featured)
+                                            <option @if ($job == 'edit' && $vendor->featured == $featured) selected @endif
+                                                value="{{ $featured }}">{{ $featured }}</option>
+                                        @endforeach
+                                    @endisset
                                 </select>
                             </div>
                             @error('status')
@@ -319,6 +313,11 @@
 
         </form>
         <!--------------------------- END Form -------------------------->
+        <select multiple name="test" class="selectize-multiple" multiple="multiple">
+            <option value="test">test</option>
+            <option value="test2">test2</option>
+            <option value="test3">test3</option>
+        </select>
     </div>
 </div>
 
@@ -329,6 +328,8 @@
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets/vendors/css/forms/toggle/bootstrap-switch.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/toggle/switchery.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/selects/selectize.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('/app-assets/vendors/css/forms/selects/selectize.default.css') }}">
     <!-- BEGIN Page Level CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/forms/checkboxes-radios.css') }}">
     <link rel="stylesheet" type="text/css"
@@ -337,6 +338,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/fonts/simple-line-icons/style.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/forms/switch.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/colors/palette-switch.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/forms/selectize/selectize.css') }}">
 @endsection
 
 @section('page-script')
@@ -347,10 +349,13 @@
     <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-checkbox.min.js') }}" type="text/javascript">
     </script>
     <script src="{{ asset('app-assets/vendors/js/forms/toggle/switchery.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('app-assets/vendors/js/forms/select/selectize.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('app-assets/js/core/libraries/jquery_ui/jquery-ui.min.js') }}" type="text/javascript"></script>
     <!-- BEGIN PAGE LEVEL JS-->
     <script src="{{ asset('app-assets/js/scripts/forms/checkbox-radio.js') }}" type="text/javascript"></script>
     <script src="{{ asset('app-assets/js/scripts/forms/switch.js') }}" type="text/javascript"></script>
     <script src="{{ asset('app-assets/vendors/js/forms/tags/form-field.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('app-assets/js/scripts/forms/select/form-selectize.js') }}" type="text/javascript"></script>
     {{-- <script src="{{ asset('app-assets\vendors\js\forms\icheck\icheck.min.js') }}" type="text/javascript"></script> --}}
 @endsection
 

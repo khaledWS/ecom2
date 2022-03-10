@@ -63,4 +63,14 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    // public function scopeVendors($query)
+    // {
+    //     $query->where();
+    // }
+
+    public function scopeVendors($query)
+    {
+        return $query->where('role_id', '=', '2');
+    }
 }

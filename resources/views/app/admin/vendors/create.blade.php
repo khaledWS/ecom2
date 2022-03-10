@@ -30,9 +30,10 @@
                             @include('app.admin.vendors.components.card-content',[
                             'formPostRouteName' => 'admin.vendors.store',
                             'formPostRoutePara' => '',
-                            'mainCategories' => [],
-                            'statusList' => [],
-                            'featuredList' => [],
+                            'mainCategories' => $mainCategories,
+                            'statusList' => $featuredList,
+                            'featuredList' => $statusList,
+                            'vendors' => $vendors,
                             'job' => 'create',
                             ])
                             <!-------------------- END Card Content -------------------->
