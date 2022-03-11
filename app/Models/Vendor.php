@@ -38,8 +38,8 @@ class Vendor extends Model
      * @var array
      */
     protected $casts = [
-        'categories' => 'array',
-        'staff' => 'array',
+        'categories' => 'collection',
+        'staff' => 'collection',
     ];
 
     /**
@@ -78,19 +78,17 @@ class Vendor extends Model
 
     public function getBanner()
     {
-        //   return getPhotoPath($this->banner, 'vendors');
-        return "test";
+        return getPhotoPath($this->banner, 'vendors');
     }
 
     public function getProfile()
     {
-        //   return getPhotoPath($this->profile, 'vendors');
-        return "test";
+        return getPhotoPath($this->profile, 'vendors');
     }
 
     public function user()
     {
-        return $this->hasOne(User::class,'id','user_id');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 
     public function getStaff()
@@ -100,11 +98,18 @@ class Vendor extends Model
 
     public function category()
     {
-        return $this->hasOne(Category::class,'id','category_id');
+        return $this->hasOne(Category::class, 'id', 'category_id');
     }
 
     public function getCategories()
     {
         return Category::find($this->categories);
     }
+
+    // public function getCategoriesAttribute($val)
+    // {
+    //     return collect($val);
+    // }
+
+
 }

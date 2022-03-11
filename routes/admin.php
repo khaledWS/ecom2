@@ -73,6 +73,7 @@ Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function ()
         Route::get('/', [VendorController::class, 'index'])->name('admin.vendors');
         //create
         Route::get('/create', [VendorController::class, 'create'])->name('admin.vendors.create');
+        Route::get('/values/{string}', [VendorController::class, 'api'])->name('admin.vendors.api');
         //store
         Route::post('/store', [VendorController::class, 'store'])->name('admin.vendors.store');
         //show

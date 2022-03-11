@@ -36,8 +36,10 @@
                                     <div class="row justify-content-center">
                                         <div class=""></div>
                                         <!-------------------- banner -------------------->
-                                        <div class="span4 col-2">
-                                            <img class="rounded-circle img-border height-100 img-thumbnail"
+                                        <div class="span4">
+                                            {{-- card-img-top img-fluid bg-cover height-300 --}}
+                                            <img class="position-relative " style="
+                                            bottom: 29px; max-height: 30rem;"
                                                 src="{{ $vendor->getBanner() }}" alt="{{ $vendor->name }} banner">
                                         </div>
                                         <div class=""></div>
@@ -49,7 +51,8 @@
                                         <div class=""></div>
                                         <!-------------------- profile -------------------->
                                         <div class="span4 col-2">
-                                            <img class="rounded-circle img-border height-100 img-thumbnail"
+                                            <img class="position-relative rounded-circle img-border img-thumbnail" style="
+                                            bottom: 50px;  min-width: 5rem;"
                                                 src="{{ $vendor->getProfile() }}" alt="{{ $vendor->name }} profile">
                                         </div>
                                         <div class=""></div>

@@ -31,7 +31,7 @@
                             'formPostRouteName' => 'admin.vendors.update',
                             'formPostRoutePara' => $vendor->id,
                             'mainCategories' => $mainCategories,
-                            'mainCategories' => $mainCategories,
+                            'subCategories' => $subCategories,
                             'statusList' => $featuredList,
                             'featuredList' => $statusList,
                             'vendors' => $vendors,

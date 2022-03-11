@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="content-wrapper">
+        <div id="selectee">test</div>
         <!--------------------------- Navigagion breadcrumps header -------------------------->
         @include('app.admin.components.breadcrumps-header',[
         'section' => "vendors",

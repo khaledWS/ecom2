@@ -139,12 +139,16 @@ class CategoryController extends Controller
             }
             if ($newCategory->has('is_main')) {
                 $newCategory['is_main'] = 1;
+            } else {
+                $newCategory['is_main'] = 0;
             }
             if (!$newCategory->has('slug')) {
                 $newCategory['slug'] = Str::slug($newCategory['name']);
             }
             if ($newCategory->has('active')) {
                 $newCategory['active'] = 1;
+            } else {
+                $newCategory['active'] = 0;
             }
             // BEGIN DATABASE TRANSACTION
             DB::beginTransaction();
