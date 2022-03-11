@@ -50,21 +50,21 @@ Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function ()
         Route::get('/delete/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
     });
 
-    //    //Product routes
-    //    Route::prefix('product')->group(function () {
-    //     //index
-    //     Route::get('/', [ProductController::class, 'index'])->name('admin.products');
-    //     //Show
-    //     Route::get('/{product}', [ProductController::class, 'show'])->name('admin.products.show');
-    //     //new
-    //     Route::get('/create', [ProductController::class, 'create'])->name('admin.products.create');
-    //     Route::post('/store', [ProductController::class, 'store'])->name('admin.products.store');
-    //     //Edit
-    //     Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('admin.products.edit');
-    //     Route::post('/update/{product}', [ProductController::class, 'update'])->name('admin.products.update');
-    //     //Delete
-    //     Route::get('/delete/{product}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
-    // });
+       //Product routes
+       Route::prefix('product')->group(function () {
+        //index
+        Route::get('/', [ProductController::class, 'index'])->name('admin.products');
+        //new
+        Route::get('/create', [ProductController::class, 'create'])->name('admin.products.create');
+        Route::post('/store', [ProductController::class, 'store'])->name('admin.products.store');
+        //Show
+        Route::get('/{product}', [ProductController::class, 'show'])->name('admin.products.show');
+        //Edit
+        Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('admin.products.edit');
+        Route::post('/update/{product}', [ProductController::class, 'update'])->name('admin.products.update');
+        //Delete
+        Route::get('/delete/{product}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
+    });
 
 
     //Product routes
