@@ -9,8 +9,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
+
+    /**
+     * the Quantity count to keep from public
+     *
+     * @param string
+     */
+    private string $hiddenQuantity;
 
     /**
      * The attributes that are mass assignable.
@@ -74,7 +80,7 @@ class Product extends Model
     ];
 
     /**
-     * getFeaturedList
+     * getFeaturedList.
      *
      * @return array
      */
@@ -84,7 +90,7 @@ class Product extends Model
     }
 
     /**
-     * getTagsList
+     * getTagsList.
      *
      * @return array
      */
@@ -95,7 +101,7 @@ class Product extends Model
 
 
     /**
-     * getProper Image URI
+     * getProper Image URI.
      *
      * @return string
      */
@@ -105,7 +111,7 @@ class Product extends Model
     }
 
     /**
-     * getImageList
+     * getImageList.
      *
      * @return Collection
      */
@@ -119,28 +125,28 @@ class Product extends Model
     }
 
     /**
-     * vendor belongs to relationship
+     * vendor belongs to relationship.
      *
      * @return void
      */
     public function vendor()
     {
-        return $this->belongsTo(Vendor::class, 'id', 'vendor_id');
+        return $this->belongsTo(Vendor::class, 'vendor_id', 'id');
     }
 
     /**
-     * category belongs to relationship
+     * category belongs to relationship.
      *
      * @return void
      */
     public function category()
     {
-        return $this->belongsTo(Category::class, 'id', 'category_id');
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
 
     /**
-     * Discount relationship
+     * Discount relationship.
      *
      * @return void
      */
@@ -149,7 +155,26 @@ class Product extends Model
     }
 
     /**
-     * calculates the new Rating based on the old value and the new entry
+     * the child products of this product.
+     *
+     * @return void
+     */
+    public function childProducts()
+    {
+    }
+
+    /**
+     * the parent product of this product.
+     *
+     * @return void
+     */
+    public function parentProduct()
+    {
+        return $this->hasOne(self::class,'id', 'product_id');
+    }
+
+    /**
+     * calculates the new Rating based on the old value and the new entry.
      *
      * @return void
      */
@@ -158,7 +183,7 @@ class Product extends Model
     }
 
     /**
-     * returns true if the product is in stock
+     * returns true if the product is in stock.
      *
      * @return void
      */
@@ -167,11 +192,22 @@ class Product extends Model
     }
 
     /**
-     * Calculates the price based on the base price base tax and any discount
+     * Calculates the price based on the base price base tax and any discount.
      *
      * @return void
      */
-    public function getPrice()
+    public function getFullPrice()
     {
     }
+
+    /**
+     * get Products who has product_id as Null.
+     *
+     * @return void
+     */
+    public function getMainProducts()
+    {
+
+    }
+
 }

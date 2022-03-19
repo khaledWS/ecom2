@@ -111,5 +111,10 @@ class Vendor extends Model
     //     return collect($val);
     // }
 
+    public static function ofCategory($categoryId)
+    {
+        return Vendor::where('category_id', $categoryId);
+    }
+
 
 }

@@ -4,9 +4,9 @@
     <div class="content-wrapper">
         <!--------------------------- Navigagion breadcrumps header -------------------------->
         @include('app.admin.components.breadcrumps-header', [
-            'section' => 'Vendors',
-            'current' => $vendor->name,
-            'sectionRoute' => 'admin.vendors',
+            'section' => 'products',
+            'current' => $product->name,
+            'sectionRoute' => 'admin.products',
         ])
         <!--------------------------- END Navigagion breadcrumps header -------------------------->
 
@@ -20,7 +20,7 @@
                         <div class="card">
                             <!--------------------------- Card Header -------------------------->
                             @include('app.admin.components.card-header', [
-                                'cardHeader' => $vendor->name,
+                                'cardHeader' => $product->name,
                             ])
                             <!--------------------------- END Card Header -------------------------->
 
@@ -33,17 +33,7 @@
                             <div class="card-content collapse show overflow-auto">
                                 <div class="card-body card-dashboard ">
                                     <!-------------------- row 1 -------------------->
-                                    <div class="row justify-content-center">
-                                        <div class=""></div>
-                                        <!-------------------- banner -------------------->
-                                        <div class="span4">
-                                            {{-- card-img-top img-fluid bg-cover height-300 --}}
-                                            <img class="position-relative " style="
-                                            bottom: 29px; max-height: 30rem;"
-                                                src="{{ $vendor->getBanner() }}" alt="{{ $vendor->name }} banner">
-                                        </div>
-                                        <div class=""></div>
-                                    </div>
+
                                     <!--------------------END row 1 -------------------->
 
                                     <!-------------------- row 2 -------------------->
@@ -52,8 +42,8 @@
                                         <!-------------------- profile -------------------->
                                         <div class="span4 col-2">
                                             <img class="position-relative rounded-circle img-border img-thumbnail" style="
-                                            bottom: 50px;  min-width: 5rem;"
-                                                src="{{ $vendor->getProfile() }}" alt="{{ $vendor->name }} profile">
+                                                                                    bottom: 50px;  min-width: 5rem;"
+                                                src="{{ $product->getImage() }}" alt="{{ $product->name }} profile">
                                         </div>
                                         <div class=""></div>
                                     </div>
@@ -66,7 +56,7 @@
                                         <div class="col-md-6">
                                             <label for="name">name</label>
                                             <div class="text-center">
-                                                <p class='form-control  bg-primary bg-accent-1'>{{ $vendor->name }}
+                                                <p class='form-control  bg-primary bg-accent-1'>{{ $product->name }}
                                                     &nbsp</p>
                                             </div>
                                         </div>
@@ -76,7 +66,7 @@
                                             <label for="slug">Slug</label>
                                             <div class="text-center">
                                                 <p class='Hover:bg-primary bg-accent-1 bg-accent-1 bg-primary form-control'>
-                                                    <a href="{{ $vendor->slug }}">{{ $vendor->slug }}</a> &nbsp
+                                                    <a href="{{ $product->slug }}">{{ $product->slug }}</a> &nbsp
                                                 </p>
                                             </div>
                                         </div>
@@ -89,35 +79,64 @@
                                     <!-------------------- row 4 -------------------->
                                     <div class="row">
                                         <!-------------------- 4-1 -------------------->
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <!-------------------- mainCategory -------------------->
                                             <label for="category">category</label>
                                             <div class="text-center">
                                                 <p class='form-control  bg-primary bg-accent-1'>
-                                                    @if (!$vendor->category == null)
-                                                        <a href="{{route('admin.categories.show',$vendor->category->id)}}">{{ $vendor->category->name }}</a>
+                                                    @if (!$product->category == null)
+                                                        <a
+                                                            href="{{ route('admin.categories.show', $product->category->id) }}">{{ $product->category->name }}</a>
                                                     @endif
                                                     &nbsp
                                                 </p>
                                             </div>
                                         </div>
                                         <!-------------------- 4-2 -------------------->
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
+                                            <!-------------------- mainCategory -------------------->
+                                            <label for="vendor">vendor</label>
+                                            <div class="text-center">
+                                                <p class='form-control  bg-primary bg-accent-1'>
+                                                    @if (!$product->vendor == null)
+                                                        <a
+                                                            href="{{ route('admin.vendors.show', $product->vendor->id) }}">{{ $product->vendor->name }}</a>
+                                                    @endif
+                                                    &nbsp
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-------------------- 4-3 -------------------->
+                                        <div class="col-md-4">
+                                            <!-------------------- mainCategory -------------------->
+                                            <label for="parent">parent product</label>
+                                            <div class="text-center">
+                                                <p class='form-control  bg-primary bg-accent-1'>
+                                                    @if (!$parentProduct == null)
+                                                        <a
+                                                            href="{{ route('admin.products.show', $parentProduct->id) }}">{{ $parentProduct->name }}</a>
+                                                    @endif
+                                                    &nbsp
+                                                </p>
+                                            </div>
+                                        </div>
+                                        {{-- <div class="col-md-6">
                                             <!-------------------- Sub Category -------------------->
                                             <label for="categories">Sub categories</label>
                                             <div class="text-center">
                                                 <p class='form-control  bg-primary bg-accent-1'>
                                                     @if (!$vendor->categories == null)
                                                         @foreach ($vendor->getCategories() as $subCategory)
-                                                            <a class="block" href="{{route('admin.categories.show',$subCategory->id)}}">{{ $subCategory->name }}</a>
+                                                            <a class="block"
+                                                                href="{{ route('admin.categories.show', $subCategory->id) }}">{{ $subCategory->name }}</a>
                                                         @endforeach
                                                     @else
-                                                    &nbsp
+                                                        &nbsp
                                                     @endif
 
                                                 </p>
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                     </div>
                                     <!--------------------END row 4 -------------------->
@@ -127,11 +146,11 @@
                                         <!-------------------- 5-1 -------------------->
                                         <div class="col-md-6">
                                             <!-------------------- main User -------------------->
-                                            <label for="category">Main User</label>
+                                            <label for="tag">Main tag</label>
                                             <div class="text-center">
                                                 <p class='form-control  bg-primary bg-accent-1'>
-                                                    @if (!$vendor->user == null)
-                                                        <a href="">{{ $vendor->user->name}}</a>
+                                                    @if (!$product->tag == null)
+                                                        {{ $product->tag }}
                                                     @endif
                                                     &nbsp
                                                 </p>
@@ -140,15 +159,15 @@
                                         <!-------------------- 5-2 -------------------->
                                         <div class="col-md-6">
                                             <!-------------------- Staff-------------------->
-                                            <label for="categories">Staff</label>
+                                            <label for="tags">tags</label>
                                             <div class="text-center">
                                                 <p class='form-control  bg-primary bg-accent-1'>
-                                                    @if (!$vendor->staff == null)
-                                                        @foreach ($vendor->getStaff() as $user)
-                                                            <a class="block" href="">{{ $user->name }}</a>
+                                                    @if (!$product->tags == null)
+                                                        @foreach ($product->tags as $tags)
+                                                            {{ $tag }}
                                                         @endforeach
                                                     @else
-                                                    &nbsp
+                                                        &nbsp
                                                     @endif
                                                 </p>
                                             </div>
@@ -160,23 +179,78 @@
                                     <!--------------------row 6 -------------------->
                                     <div class="row">
                                         <!-------------------- 6-1 -------------------->
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <label for="description">description</label>
                                             <div class="text-center">
                                                 <p class='form-control  bg-primary bg-accent-1'>
-                                                    {{ $vendor->description }} &nbsp</p>
+                                                    {{ $product->description }} &nbsp</p>
                                             </div>
                                         </div>
                                         <!-------------------- 6-2 -------------------->
-                                        <div class="col-md-6">
-                                            <label for="status">status</label>
+                                        <div class="col-md-4">
+                                            <label for="status">info</label>
                                             <div class="text-center">
                                                 <p class='form-control  bg-primary bg-accent-1'>
-                                                    {{ $vendor->status }} &nbsp</p>
+                                                    {{ $product->info }} &nbsp</p>
+                                            </div>
+                                        </div>
+                                        <!-------------------- 6-3 -------------------->
+                                        <div class="col-md-4">
+                                            <label for="details">details</label>
+                                            <div class="text-center">
+                                                <p class='form-control  bg-primary bg-accent-1'>
+                                                    {{ $product->details }} &nbsp</p>
                                             </div>
                                         </div>
                                     </div>
                                     <!--------------------END row 6 -------------------->
+
+                                    <!-------------------- row 5 -------------------->
+                                    <div class="row">
+                                        <!-------------------- 5-1 -------------------->
+                                        <div class="col-md-6">
+                                            <!-------------------- main User -------------------->
+                                            <label for="featured">featured</label>
+                                            <div class="text-center">
+                                                <p class='form-control  bg-primary bg-accent-1'>
+                                                    @if (!$product->featured == null)
+                                                        {{ $product->featured }}
+                                                    @endif
+                                                    &nbsp
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-------------------- 5-2 -------------------->
+                                        <div class="col-md-6">
+                                            <!-------------------- Staff-------------------->
+                                            <label for="base_price">base price</label>
+                                            <div class="text-center">
+                                                <p class='form-control  bg-primary bg-accent-1'>
+                                                    @if (!$product->base_price == null)
+                                                        {{ $product->base_price }}
+                                                    @else
+                                                        &nbsp
+                                                    @endif
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-------------------- 5-2 -------------------->
+                                        <div class="col-md-6">
+                                            <!-------------------- Staff-------------------->
+                                            <label for="base_tax">base tax</label>
+                                            <div class="text-center">
+                                                <p class='form-control  bg-primary bg-accent-1'>
+                                                    @if (!$product->base_tax == null)
+                                                        {{ $product->base_tax }}
+                                                    @else
+                                                        &nbsp
+                                                    @endif
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!--------------------END row 5 -------------------->
 
                                     <!--------------------row 7 -------------------->
                                     <div class="row">
@@ -184,11 +258,27 @@
                                         <div class="col-md-6">
                                             <label for="active">Actice</label>
                                             <div class="text-center">
-                                                <p class='form-control @if ($vendor->active) bg-success bg-accent-2
+                                                <p class='form-control @if ($product->active) bg-success bg-accent-2
                                                 @else
                                                 bg-red bg-accent-2 @endif  bg-primary bg-accent-1 alert-green'
                                                     id='slug'>
-                                                    @if ($vendor->active)
+                                                    @if ($product->active)
+                                                        Yes
+                                                    @else
+                                                        No
+                                                    @endif
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-------------------- 7-1 -------------------->
+                                        <div class="col-md-6">
+                                            <label for="in_stock">in stock?</label>
+                                            <div class="text-center">
+                                                <p class='form-control @if ($product->in_stock) bg-success bg-accent-2
+                                                                                        @else
+                                                                                        bg-red bg-accent-2 @endif  bg-primary bg-accent-1 alert-green'
+                                                    id='slug'>
+                                                    @if ($product->in_stock)
                                                         Yes
                                                     @else
                                                         No
@@ -198,10 +288,19 @@
                                         </div>
                                         <!-------------------- 7-2 -------------------->
                                         <div class="col-md-6">
-                                            <label for="featured">featured</label>
+                                            <label for="quantity">quantity</label>
                                             <div class="text-center">
                                                 <p class='form-control  bg-primary bg-accent-1'>
-                                                    {{ $vendor->featured }} &nbsp</p>
+                                                    {{ $product->quantity }} &nbsp</p>
+                                            </div>
+                                        </div>
+
+                                        <!-------------------- 7-2 -------------------->
+                                        <div class="col-md-6">
+                                            <label for="discount">discount</label>
+                                            <div class="text-center">
+                                                <p class='form-control  bg-primary bg-accent-1'>
+                                                    DISCOUNT &nbsp</p>
                                             </div>
                                         </div>
                                     </div>
@@ -210,7 +309,7 @@
                                     <!--------------------------- Actions -------------------------->
                                     <form>
                                         <div class=" form-actions right">
-                                            <a href="{{route('admin.vendors.edit',$vendor->id)}}"><button
+                                            <a href="{{ route('admin.products.edit', $product->id) }}"><button
                                                     type="button" class="btn btn-info mr-1 left">
                                                     <i class="la la-info"></i> Edit
                                                 </button></a>

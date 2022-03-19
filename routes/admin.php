@@ -51,7 +51,7 @@ Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function ()
     });
 
        //Product routes
-       Route::prefix('product')->group(function () {
+       Route::prefix('products')->group(function () {
         //index
         Route::get('/', [ProductController::class, 'index'])->name('admin.products');
         //new

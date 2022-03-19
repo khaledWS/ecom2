@@ -2,12 +2,11 @@
 
 @section('content')
     <div class="content-wrapper">
-        <div id="selectee">test</div>
         <!--------------------------- Navigagion breadcrumps header -------------------------->
         @include('app.admin.components.breadcrumps-header',[
-        'section' => "vendors",
+        'section' => "products",
         'current' =>"create",
-        'sectionRoute' => "admin.vendors"
+        'sectionRoute' => "admin.products"
         ])
         <!--------------------------- END Navigagion breadcrumps header -------------------------->
 
@@ -19,7 +18,7 @@
                         <div class="card">
                             <!--------------------------- Card Header -------------------------->
                             @include('app.admin.components.card-header',
-                            ['cardHeader' =>"Add a new vendor"])
+                            ['cardHeader' =>"Add a new product"])
                             <!--------------------------- END Card Header -------------------------->
 
                             <!-------------------- Alerts -------------------->
@@ -28,13 +27,15 @@
                             <!-------------------- END Alerts -------------------->
 
                             <!-------------------- Card Content -------------------->
-                            @include('app.admin.vendors.components.card-content',[
-                            'formPostRouteName' => 'admin.vendors.store',
+                            @include('app.admin.products.components.card-content',[
+                            'formPostRouteName' => 'admin.products.store',
                             'formPostRoutePara' => '',
                             'mainCategories' => $mainCategories,
-                            'statusList' => $featuredList,
-                            'featuredList' => $statusList,
                             'vendors' => $vendors,
+                            'mainProducts' => $mainProducts,
+                            'statusList' => $featuredList,
+                            'tagList' => $tagList,
+                            'discountList' => $discountList,
                             'job' => 'create',
                             ])
                             <!-------------------- END Card Content -------------------->

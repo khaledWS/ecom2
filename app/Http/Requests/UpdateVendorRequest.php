@@ -32,26 +32,31 @@ class UpdateVendorRequest extends FormRequest
                 Rule::exists('categories', 'id')
                     ->where('is_main', true)
             ],
-            'categories[]' => [
-                Rule::exists('categories', 'id')
-                    ->where('is_main', false)
-            ],
-
-            'staff[]' => [
-                Rule::exists('users', 'id')
-                    ->where('role_id', 2)
-            ],
-            'user' =>  [
+            'vendor' =>  [
                 'required',
-                Rule::exists('users', 'id')
-                    ->where('role_id', 2)
+                Rule::exists('vendors', 'id')
+            ],
+            'product_id' =>  [
+                'required',
+                Rule::exists('products', 'id')
+                    ->where('product_id', null)
+            ],
+            'discount_id' =>  [
+                'required',
+                Rule::exists('discounts', 'id')
             ],
             'description' => 'string',
-            'status' => 'string',
+            'info' => 'string',
+            'details' => 'string',
+            'base_price' => 'numeric',
+            'base_tax' => 'numeric',
+            'quantity' => 'numeric',
+            'tag' => 'string',
             'active' => 'in:0,1|nullable',
+            'in_stock' => 'in:0,1|nullable',
             'featured' => 'string',
-            'profile' => 'image|mimes:png,jpg,jpeg',
-            'banner' => 'image|mimes:png,jpg,jpeg',
+            'image' => 'image|mimes:png,jpg,jpeg',
+            'images[]' => 'image|mimes:png,jpg,jpeg',
         ];
     }
 }

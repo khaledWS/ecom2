@@ -3,10 +3,10 @@
 @section('content')
     <div class="content-wrapper">
         <!--------------------------- Navigagion breadcrumps header -------------------------->
-        @include('app.admin.components.breadcrumps-header',[
-        'section' => "vendors",
-        'current' =>"Edit",
-        'sectionRoute' => "admin.vendors"
+        @include('app.admin.components.breadcrumps-header', [
+            'section' => 'products',
+            'current' => 'Edit',
+            'sectionRoute' => 'admin.products',
         ])
         <!--------------------------- END Navigagion breadcrumps header -------------------------->
 
@@ -17,8 +17,9 @@
                         <!--------------------------- Card -------------------------->
                         <div class="card">
                             <!--------------------------- Card Header -------------------------->
-                            @include('app.admin.components.card-header',
-                            ['cardHeader' =>"Edit vendor"])
+                            @include('app.admin.components.card-header', [
+                                'cardHeader' => 'Edit product',
+                            ])
                             <!--------------------------- END Card Header -------------------------->
 
                             <!-------------------- Alerts -------------------->
@@ -27,16 +28,19 @@
                             <!-------------------- END Alerts -------------------->
 
                             <!-------------------- Card Content -------------------->
-                            @include('app.admin.vendors.components.card-content',[
-                            'formPostRouteName' => 'admin.vendors.update',
-                            'formPostRoutePara' => $vendor->id,
-                            'mainCategories' => $mainCategories,
-                            'subCategories' => $subCategories,
-                            'statusList' => $featuredList,
-                            'featuredList' => $statusList,
-                            'vendors' => $vendors,
-                            'job' => 'edit',
-                            ])
+                            @include('app.admin.products.components.card-content',
+                                [
+                                    'formPostRouteName' => 'admin.products.update',
+                                    'formPostRoutePara' => $product->id,
+                                    'mainCategories' => $mainCategories,
+                                    'vendors' => $vendors,
+                                    'mainProducts' => $mainProducts,
+                                    'statusList' => $featuredList,
+                                    'tagList' => $tagList,
+                                    'discountList' => $discountList,
+                                    'job' => 'edit',
+                                ]
+                            )
                             <!-------------------- END Card Content -------------------->
                         </div>
                         <!--------------------------- END Card -------------------------->

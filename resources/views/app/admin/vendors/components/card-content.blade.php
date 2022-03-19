@@ -471,16 +471,16 @@ href="{{ asset('app-assets/css/core/menu/menu-types/vertical-menu-modern.css') }
         }
     }
 
-    // function getcate() {
-    //     $.get("http://127.0.0.1:8000/admin/vendors/values/cate?cate=1", function(data, status) {
-    //         cate = jQuery.parseJSON(data);
-    //         let text = "";
-    //         for(let x = 0; x<cate.length; x++){
-    //             text = text+'<div data-value="'+cate[x].id+'" data-selectable="" class="option">'+cate[x].name+'</div>';
+    function getcate() {
+        $.get("http://127.0.0.1:8000/admin/vendors/values/cate?cate=1", function(data, status) {
+            cate = jQuery.parseJSON(data);
+            let text = "";
+            for(let x = 0; x<cate.length; x++){
+                text = text+'<div data-value="'+cate[x].id+'" data-selectable="" class="option">'+cate[x].name+'</div>';
 
-    //         }
-    //         $('.selectize-dropdown-content').html(text);
-    //     });
-    // }
+            }
+            $('.selectize-dropdown-content').html(text);
+        });
+    }
 </script>
 @endsection
