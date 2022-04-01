@@ -3,7 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,6 +64,26 @@ Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function ()
         Route::post('/update/{product}', [ProductController::class, 'update'])->name('admin.products.update');
         //Delete
         Route::get('/delete/{product}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
+    });
+
+    Route::prefix('metro')->group(function (){
+        Route::prefix('products')->group(function () {
+            Route::get('/', function () {
+                return view('app.project.admin.products.index');
+            });
+            Route::get('add-product', function () {
+                return view('app.project.admin.products.add-product');
+            });
+            Route::post('/add',function(Request $request){
+                return $request;
+            })->name('added');
+            Route::get('view-product', function () {
+                return view('app.project.view-product');
+            });
+            Route::get('edit-product', function () {
+                return view('app.project.view-product');
+            });
+        });
     });
 
 

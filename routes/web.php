@@ -29,3 +29,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::get('admin/category/create',function(){
     throw new Exception();
 })->name('admin.categories.create');
+
+Route::get('/metro', function (){
+    return view('app.project.index');
+});
