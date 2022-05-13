@@ -23,6 +23,7 @@ class ProductController extends Controller
     public function index()
     {
         $dataset = Product::paginate(10);
+        dd(Product::all());
         return view('app.admin.products.index', compact('dataset'));
     }
 
